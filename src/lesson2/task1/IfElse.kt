@@ -3,6 +3,9 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import ru.spbstu.kotlin.generate.assume.retry
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -65,7 +68,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String =
     if (age in 11..14 || age in 111..114) "$age лет"
-    else if (age % 10 == 1)  "$age год"
+    else if (age % 10 == 1) "$age год"
     else if (age % 10 in 2..4) "$age года"
     else "$age лет"
 
@@ -82,6 +85,7 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double = TODO()
 
+
 /**
  * Простая
  *
@@ -96,6 +100,7 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int = TODO()
+
 
 /**
  * Простая
@@ -113,6 +118,8 @@ fun rookOrBishopThreatens(
     bishopX: Int, bishopY: Int
 ): Int = TODO()
 
+
+
 /**
  * Простая
  *
@@ -121,7 +128,11 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
+
+
 fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+
+
 
 /**
  * Средняя
