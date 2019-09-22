@@ -138,6 +138,7 @@ fun rookOrBishopThreatens(
     else 0
 
 
+
 /**
  * Простая
  *
