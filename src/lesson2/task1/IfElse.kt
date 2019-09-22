@@ -185,6 +185,5 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         b in (c + 1) until d -> result = b - c
         d in (a + 1) until b -> result = d - a
     }
-
     return result
 }
