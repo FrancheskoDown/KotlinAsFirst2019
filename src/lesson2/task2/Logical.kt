@@ -108,10 +108,8 @@ fun circleInside(
     val maxR = maxOf(r1, r2)
     val minR = minOf(r1, r2)
 
-    when {
-        x1 == x2 && y1 == y2 && r1 == r2 -> result = true
-        sqrt(sqr(maxX - minX) + sqr(maxY - minY)) + minR == maxR -> result = true
-    }
+
+    if (sqrt(sqr(maxX - minX) + sqr(maxY - minY)) + minR == maxR) result = true
 
     return result
 }
