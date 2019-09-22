@@ -101,15 +101,8 @@ fun circleInside(
     x2: Double, y2: Double, r2: Double
 ): Boolean {
     var result = false
-    val maxX = maxOf(x1, x2)
-    val minX = minOf(x1, x2)
-    val maxY = maxOf(y1, y2)
-    val minY = minOf(y1, y2)
-    val maxR = maxOf(r1, r2)
-    val minR = minOf(r1, r2)
 
-
-    if (sqrt(sqr(maxX - minX) + sqr(maxY - minY)) + minR == maxR) result = true
+    if (sqrt(sqr(x2 - x1) + sqr(y2 - y1)) + r1 <= r2) result = true
 
     return result
 }
