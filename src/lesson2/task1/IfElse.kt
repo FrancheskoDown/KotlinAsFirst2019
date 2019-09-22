@@ -182,8 +182,8 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     when {
         b == c || d == a -> result = 0
         a == c && b == d -> result = d - c
-        a > c && b < d || a > c && b == d /*|| a == c && b < d*/ -> result = b - a
-        c > a && d < b || c > a && d == b /*|| c == a && d < b*/ -> result = d - c
+        a > c && b < d || a > c && b == d || a == c && b < d -> result = b - a
+        c > a && d < b || c > a && d == b || c == a && d < b -> result = d - c
         b in (c + 1) until d -> result = b - c
         d in (a + 1) until b -> result = d - a
     }
