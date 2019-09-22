@@ -83,7 +83,18 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val firstWay = v1 * t1
+    val secondWay = v2 * t2
+    val thirdWay = v3 * t3
+    val halfWay = (firstWay + secondWay + thirdWay) / 2
+    return when {
+        firstWay + secondWay < halfWay -> ((halfWay - firstWay - secondWay) / v3) + t1 + t2
+        firstWay < halfWay -> ((halfWay - firstWay) / v2) + t1
+        firstWay > halfWay -> t1 - (firstWay - halfWay) / v1
+        else -> (t1 + t2) - (((firstWay + secondWay) - halfWay) / v2)
+    }
+}
 
 
 /**
@@ -99,7 +110,11 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int =
+    if (kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1) 3
+    else if (kingX == rookX1 || kingY == rookY1) 1
+    else if (kingX == rookX2 || kingY == rookY2) 2
+    else 0
 
 
 /**
@@ -116,8 +131,11 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
-
+): Int =
+    if (kingX == rookX || kingY == rookY && abs(bishopX - kingX) == abs(bishopY - kingY)) 3
+    else if (abs(bishopX - kingX) == abs(bishopY - kingY)) 2
+    else if (kingX == rookX || kingY == rookY) 1
+    else 0
 
 
 /**
@@ -130,8 +148,21 @@ fun rookOrBishopThreatens(
  */
 
 
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val maxSide = maxOf(a, b, c)
+    val minSide = minOf(a, b, c)
+    val middleSide = (a + b + c) - (minSide + maxSide)
+    var result = -2
 
+    if (a + b < c || a + c < b || b + c < a) return -1
+
+    when {
+        sqr(middleSide) + sqr(minSide) < sqr(maxSide) -> result = 2
+        sqr(middleSide) + sqr(minSide) > sqr(maxSide) -> result = 0
+        sqr(middleSide) + sqr(minSide) == sqr(maxSide) -> result = 1
+    }
+    return result
+}
 
 
 /**
@@ -142,4 +173,18 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    var result = -2
+
+    if (c > b || a > d) return -1
+
+    when {
+        b == c || d == a -> result = 0
+        a > c && b < d -> result = b - a
+        c > a && d < b -> result = d - c
+        b in (c + 1) until d -> result = b - c
+        d in (a + 1) until b -> result = d - a
+    }
+
+    return result
+}
