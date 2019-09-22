@@ -4,6 +4,7 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -103,7 +104,7 @@ fun circleInside(
 
     when {
         x1 == x2 && y1 == y2 && r1 == r2 -> result = true
-        sqr(x1 - x2) + sqr(y1 + y2) == sqr(r1 - r2) -> result = true
+        sqr(x1 - x2) + sqr(y1 - y2) == sqr(r1 - r2) -> result = true
     }
 
     return result
