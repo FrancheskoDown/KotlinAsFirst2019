@@ -4,7 +4,6 @@ package lesson2.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import ru.spbstu.kotlin.generate.assume.retry
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
@@ -67,10 +66,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String =
-    if (age in 11..14 || age in 111..114) "$age лет"
-    else if (age % 10 == 1) "$age год"
-    else if (age % 10 in 2..4) "$age года"
-    else "$age лет"
+    when {
+        age % 100 in 11..14 -> "$age лет"
+        age % 10 == 1 -> "$age год"
+        age % 10 in 2..4 -> "$age года"
+        else -> "$age лет"
+    }
+
 
 /**
  * Простая
@@ -88,12 +90,15 @@ fun timeForHalfWay(
     val secondWay = v2 * t2
     val thirdWay = v3 * t3
     val halfWay = (firstWay + secondWay + thirdWay) / 2
-    return when {
-        firstWay + secondWay < halfWay -> ((halfWay - firstWay - secondWay) / v3) + t1 + t2
-        firstWay < halfWay -> ((halfWay - firstWay) / v2) + t1
-        firstWay > halfWay -> t1 - (firstWay - halfWay) / v1
-        else -> (t1 + t2) - (((firstWay + secondWay) - halfWay) / v2)
+    var result = 0.0
+    when {
+        firstWay + secondWay < halfWay -> result = ((halfWay - firstWay - secondWay) / v3) + t1 + t2
+        firstWay < halfWay -> result = ((halfWay - firstWay) / v2) + t1
+        firstWay > halfWay -> result = t1 - (firstWay - halfWay) / v1
+        firstWay + secondWay > halfWay -> result = (t1 + t2) - (((firstWay + secondWay) - halfWay) / v2)
+
     }
+    return result
 }
 
 
@@ -111,7 +116,7 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int =
-    if (kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1) 3
+    if (kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1 || kingX == rookX1 && kingX == rookX2 || kingY == rookY1 && kingY == rookY2) 3
     else if (kingX == rookX1 || kingY == rookY1) 1
     else if (kingX == rookX2 || kingY == rookY2) 2
     else 0
@@ -132,11 +137,10 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int =
-    if (kingX == rookX && abs(bishopX - kingX) == abs(bishopY - kingY) || kingY == rookY && abs(bishopX - kingX) == abs(bishopY - kingY)) 3
+    if ((kingX == rookX || kingY == rookY) && abs(bishopX - kingX) == abs(bishopY - kingY)) 3
     else if (abs(bishopX - kingX) == abs(bishopY - kingY)) 2
     else if (kingX == rookX || kingY == rookY) 1
     else 0
-
 
 
 /**
@@ -147,22 +151,17 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-
-
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val maxSide = maxOf(a, b, c)
     val minSide = minOf(a, b, c)
     val middleSide = (a + b + c) - (minSide + maxSide)
-    var result = -2
 
     if (a + b < c || a + c < b || b + c < a) return -1
-
-    when {
-        sqr(middleSide) + sqr(minSide) < sqr(maxSide) -> result = 2
-        sqr(middleSide) + sqr(minSide) > sqr(maxSide) -> result = 0
-        sqr(middleSide) + sqr(minSide) == sqr(maxSide) -> result = 1
+    return when {
+        sqr(middleSide) + sqr(minSide) < sqr(maxSide) -> 2
+        sqr(middleSide) + sqr(minSide) > sqr(maxSide) -> 0
+        else -> 1
     }
-    return result
 }
 
 
@@ -175,17 +174,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var result = -2
 
     if (c > b || a > d) return -1
 
-    when {
-        b == c || d == a -> result = 0
-        a == c && b == d -> result = d - c
-        a > c && b < d || a > c && b == d || a == c && b < d -> result = b - a
-        c > a && d < b || c > a && d == b || c == a && d < b -> result = d - c
-        b in (c + 1) until d -> result = b - c
-        d in (a + 1) until b -> result = d - a
+    return when {
+        b == c || d == a -> 0
+        a <= c && b >= d -> d - c
+        a >= c && b <= d -> b - a
+        b in (c + 1) until d -> b - c
+        else -> d - a
     }
-    return result
 }
