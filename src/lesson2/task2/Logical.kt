@@ -60,7 +60,6 @@ fun daysInMonth(month: Int, year: Int): Int {
         }
 }
 
-
 /**
  * Средняя
  *
