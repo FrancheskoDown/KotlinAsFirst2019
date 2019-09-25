@@ -90,15 +90,12 @@ fun timeForHalfWay(
     val secondWay = v2 * t2
     val thirdWay = v3 * t3
     val halfWay = (firstWay + secondWay + thirdWay) / 2
-    var result = 0.0
-    when {
-        firstWay + secondWay < halfWay -> result = ((halfWay - firstWay - secondWay) / v3) + t1 + t2
-        firstWay < halfWay -> result = ((halfWay - firstWay) / v2) + t1
-        firstWay > halfWay -> result = t1 - (firstWay - halfWay) / v1
-        firstWay + secondWay > halfWay -> result = (t1 + t2) - (((firstWay + secondWay) - halfWay) / v2)
+    return when {
+        firstWay + secondWay < halfWay -> ((halfWay - firstWay - secondWay) / v3) + t1 + t2
+        firstWay <= halfWay -> ((halfWay - firstWay) / v2) + t1
+        else -> t1 - (firstWay - halfWay) / v1
 
     }
-    return result
 }
 
 
@@ -116,7 +113,7 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int =
-    if (kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1 || kingX == rookX1 && kingX == rookX2 || kingY == rookY1 && kingY == rookY2) 3
+    if ((kingX == rookX1 || kingX == rookX2) && (kingY == rookY1 || kingY == rookY2)) 3
     else if (kingX == rookX1 || kingY == rookY1) 1
     else if (kingX == rookX2 || kingY == rookY2) 2
     else 0
@@ -178,10 +175,9 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     if (c > b || a > d) return -1
 
     return when {
-        b == c || d == a -> 0
         a <= c && b >= d -> d - c
         a >= c && b <= d -> b - a
-        b in (c + 1) until d -> b - c
+        b >= c && b < b -> b - c
         else -> d - a
     }
 }
