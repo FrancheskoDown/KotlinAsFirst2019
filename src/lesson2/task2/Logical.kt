@@ -3,6 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import lesson3.task1.minDivisor
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -76,5 +77,13 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val minSideOfHole = minOf(r, s)
+    val maxSideOfHole = maxOf(r, s)
+    val minSideOfBrick = minOf(a, b, c)
+    val maxSideOfBrick = maxOf(a, b, c)
+    val mediumSideOfBrick = (a + b + c) - (maxSideOfBrick + minSideOfBrick)
+    return !(minSideOfBrick > maxSideOfHole || mediumSideOfBrick > maxSideOfHole || minSideOfBrick > minSideOfHole)
+
+}
 
