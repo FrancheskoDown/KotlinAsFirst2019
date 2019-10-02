@@ -169,7 +169,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     var result = false
     for (i in m..n) {
         number = i.toDouble()
-        if (sqrt(number) - sqrt(number).toInt() == 0.0) result = true
+        if (sqrt(number) % 1.0 == 0.0) result = true
     }
     return result
 }
@@ -190,8 +190,16 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
-
+fun collatzSteps(x: Int): Int {
+    var nextX = x
+    var step = 0
+    while (nextX != 1) {
+        if (nextX % 2 == 0) nextX /= 2
+        else nextX = 3 * nextX + 1
+        step++
+    }
+    return step
+}
 /**
  * Средняя
  *
