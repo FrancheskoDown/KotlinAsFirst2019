@@ -272,7 +272,7 @@ fun isPalindrome(n: Int): Boolean {
     while (number != 0) {
         firstSymbol = number / (10.0.pow(counter - 1)).toInt()
         lastSymbol = number % 10
-        number %= number / (10.0.pow(counter - 1)).toInt()
+        number = (number - (10.0.pow(counter - 1))).toInt()
         number /= 10
         counter--
         when {
@@ -297,7 +297,9 @@ fun hasDifferentDigits(n: Int): Boolean {
     var symbol2: Int
     var result = false
     var counter = 0.0
+
     if (number < 10) return false
+
     while (number != 0) {
         number /= 10
         counter++
@@ -305,8 +307,9 @@ fun hasDifferentDigits(n: Int): Boolean {
     number = n
     while (number != 0) {
         symbol1 = number / (10.0.pow(counter - 1)).toInt()
-        symbol2 = number / (10.0.pow(counter - 1)).toInt()
-        number %= number / (10.0.pow(counter)).toInt()
+        number -= (10.0.pow(counter - 1)).toInt()
+        symbol2 = number / (10.0.pow(counter - 2)).toInt()
+        number -= (10.0.pow(counter - 2)).toInt()
         counter--
         result = symbol1 != symbol2
     }
