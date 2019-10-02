@@ -1,6 +1,9 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson3.task1
+import lesson1.task1.sqr
+import java.lang.Math.pow
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -165,11 +168,9 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var number: Double
     var result = false
     for (i in m..n) {
-        number = i.toDouble()
-        if (sqrt(number) % 1.0 == 0.0) result = true
+        if (sqrt(i.toDouble()) % 1.0 == 0.0) result = true
     }
     return result
 }
@@ -229,7 +230,23 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var number = n
+    var resultNumber = 0
+    var counter = 0.0
+    while (number != 0){
+        number /= 10
+        counter++
+    }
+    number = n
+    while (number > 0) {
+        resultNumber += ((number % 10) * 10.0.pow(counter)).toInt()
+        number /= 10
+        counter--
+    }
+
+    return resultNumber / 10
+}
 
 /**
  * Средняя
