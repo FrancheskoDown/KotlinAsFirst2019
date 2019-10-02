@@ -1,6 +1,8 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson3.task1
+
+import lesson9.task2.isLatinSquare
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -199,6 +201,7 @@ fun collatzSteps(x: Int): Int {
     }
     return step
 }
+
 /**
  * Средняя
  *
@@ -232,18 +235,18 @@ fun revert(n: Int): Int {
     var number = n
     var resultNumber = 0
     var counter = 0.0
-    while (number != 0){
+    while (number != 0) {
         number /= 10
         counter++
     }
     number = n
-    while (number > 0) {
-        resultNumber += ((number % 10) * 10.0.pow(counter)).toInt()
+    while (number != 0) {
+        resultNumber += ((number % 10) * 10.0.pow(counter - 1)).toInt()
         number /= 10
         counter--
     }
 
-    return resultNumber / 10
+    return resultNumber
 }
 
 /**
@@ -255,7 +258,30 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var number = n
+    var firstSymbol: Int
+    var lastSymbol: Int
+    var result = false
+    var counter = 0.0
+    while (number != 0) {
+        number /= 10
+        counter++
+    }
+    number = n
+    while (number != 0) {
+        firstSymbol = number / (10.0.pow(counter - 1)).toInt()
+        lastSymbol = number % 10
+        number %= number / (10.0.pow(counter - 1)).toInt()
+        number /= 10
+        counter--
+        when {
+            firstSymbol == lastSymbol -> result = true
+            firstSymbol != lastSymbol -> result = false
+        }
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -265,7 +291,27 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var number = n
+    var symbol1: Int
+    var symbol2: Int
+    var result = false
+    var counter = 0.0
+    if (number < 10) return false
+    while (number != 0) {
+        number /= 10
+        counter++
+    }
+    number = n
+    while (number != 0) {
+        symbol1 = number / (10.0.pow(counter - 1)).toInt()
+        symbol2 = number / (10.0.pow(counter - 1)).toInt()
+        number %= number / (10.0.pow(counter)).toInt()
+        counter--
+        result = symbol1 != symbol2
+    }
+    return result
+}
 
 /**
  * Сложная
