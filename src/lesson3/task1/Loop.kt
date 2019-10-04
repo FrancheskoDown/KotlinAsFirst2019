@@ -2,10 +2,8 @@
 
 package lesson3.task1
 
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.pow
-import kotlin.math.sqrt
+import lesson1.task1.sqr
+import kotlin.math.*
 
 /**
  * Пример
@@ -303,7 +301,29 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var number = 0
+    var sqrOfNumber = 0
+    var numeralInLine = 0
+    var counter1 = 0
+    var counter2 = 0
+    while (numeralInLine < n) {
+        number++
+        sqrOfNumber = sqr(number)
+        while (sqrOfNumber != 0) {
+            sqrOfNumber /= 10
+            counter1++
+        }
+        sqrOfNumber = sqr(number)
+        counter2 = counter1
+        counter1 = 0
+        numeralInLine += counter2
+    }
+    if (numeralInLine - n == 0) return sqrOfNumber % 10
+    return (sqrOfNumber / (10.0.pow(abs(n - numeralInLine))).toInt()) % 10
+}
+
+
 
 /**
  * Сложная
