@@ -258,30 +258,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var number = n
-    var firstSymbol: Int
-    var lastSymbol: Int
-    var result = false
-    var counter = 0.0
-    while (number != 0) {
-        number /= 10
-        counter++
-    }
-    number = n
-    while (number != 0) {
-        firstSymbol = number / (10.0.pow(counter - 1)).toInt()
-        lastSymbol = number % 10
-        number = (number - (10.0.pow(counter - 1))).toInt()
-        number /= 10
-        counter--
-        when {
-            firstSymbol == lastSymbol -> result = true
-            firstSymbol != lastSymbol -> result = false
-        }
-    }
-    return result
-}
+fun isPalindrome(n: Int): Boolean = revert(n) == n
 
 /**
  * Средняя
@@ -295,10 +272,9 @@ fun hasDifferentDigits(n: Int): Boolean {
     var number = n
     var symbol1: Int
     var symbol2: Int
-    var result = false
     var counter = 0.0
 
-    if (number < 10) return false
+    if (number in 0..9) return false
 
     while (number != 0) {
         number /= 10
@@ -307,13 +283,17 @@ fun hasDifferentDigits(n: Int): Boolean {
     number = n
     while (number != 0) {
         symbol1 = number / (10.0.pow(counter - 1)).toInt()
-        number -= (10.0.pow(counter - 1)).toInt()
-        symbol2 = number / (10.0.pow(counter - 2)).toInt()
-        number -= (10.0.pow(counter - 2)).toInt()
+        number -= ((10.0.pow(counter - 1)) * symbol1).toInt()
         counter--
-        result = symbol1 != symbol2
+        symbol2 = number / (10.0.pow(counter - 1)).toInt()
+        number -= ((10.0.pow(counter - 1)) * symbol2).toInt()
+        if (symbol1 != symbol2) return true
+        if (number in 0..9) {
+            symbol1 = number % 10
+            if (symbol1 != symbol2) return true
+        }
     }
-    return result
+    return false
 }
 
 /**
