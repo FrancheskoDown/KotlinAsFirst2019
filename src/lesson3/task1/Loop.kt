@@ -2,7 +2,8 @@
 
 package lesson3.task1
 
-import lesson9.task2.isLatinSquare
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -168,11 +169,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var result = false
     for (i in m..n) {
-        if (sqrt(i.toDouble()) % 1.0 == 0.0) result = true
+        if (sqrt(i.toDouble()) % 1.0 == 0.0) return true
     }
-    return result
+    return false
 }
 
 /**
@@ -269,29 +269,28 @@ fun isPalindrome(n: Int): Boolean = revert(n) == n
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var number = n
+    var number = revert(n)
     var symbol1: Int
     var symbol2: Int
-    var counter = 0.0
 
     if (number in 0..9) return false
 
-    while (number != 0) {
+
+    while (number > 99) {
+        symbol1 = number % 10
         number /= 10
-        counter++
-    }
-    number = n
-    while (number != 0) {
-        symbol1 = number / (10.0.pow(counter - 1)).toInt()
-        number -= ((10.0.pow(counter - 1)) * symbol1).toInt()
-        counter--
-        symbol2 = number / (10.0.pow(counter - 1)).toInt()
-        number -= ((10.0.pow(counter - 1)) * symbol2).toInt()
+        symbol2 = number % 10
+        number /= 10
         if (symbol1 != symbol2) return true
         if (number in 0..9) {
             symbol1 = number % 10
             if (symbol1 != symbol2) return true
         }
+    }
+    if (number > 9) {
+        symbol1 = n % 10
+        symbol2 = n / 10
+        if (symbol1 != symbol2) return true
     }
     return false
 }
