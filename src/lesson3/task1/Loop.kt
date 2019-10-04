@@ -334,4 +334,30 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var fib1 = 1
+    var fib2 = 1
+    var fibN = 0
+    var counter1 = 0
+    var counter2 = 0
+    var numeralInLine = 3
+
+    if (n == 1 || n == 2) return 1
+
+    while (numeralInLine <= n) {
+        fibN = fib1 + fib2
+        fib1 = fib2
+        fib2 = fibN
+        while (fibN != 0) {
+            fibN /= 10
+            counter1++
+        }
+        fibN = fib2
+        counter2 = counter1
+        counter1 = 0
+        numeralInLine += counter2
+    }
+    numeralInLine--
+    if (numeralInLine - n == 0) return fibN % 10
+    return (fibN / (10.0.pow(abs(n - numeralInLine))).toInt()) % 10
+}
