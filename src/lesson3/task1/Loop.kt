@@ -98,7 +98,6 @@ fun fib(n: Int): Int {
     return fib2
 }
 
-
 /**
  * Простая
  *
