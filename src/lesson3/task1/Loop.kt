@@ -323,8 +323,6 @@ fun squareSequenceDigit(n: Int): Int {
     return (sqrOfNumber / (10.0.pow(abs(n - numeralInLine))).toInt()) % 10
 }
 
-
-
 /**
  * Сложная
  *
