@@ -306,7 +306,7 @@ fun squareSequenceDigit(n: Int): Int {
     var sqrOfNumber = 0
     var numeralInLine = 0
     var counter1 = 0
-    var counter2 = 0
+    var counter2: Int
     while (numeralInLine < n) {
         number++
         sqrOfNumber = sqr(number)
@@ -339,7 +339,7 @@ fun fibSequenceDigit(n: Int): Int {
     var fib2 = 1
     var fibN = 0
     var counter1 = 0
-    var counter2 = 0
+    var counter2: Int
     var numeralInLine = 3
 
     if (n == 1 || n == 2) return 1
