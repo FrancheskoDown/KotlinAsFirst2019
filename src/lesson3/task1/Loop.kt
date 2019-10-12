@@ -232,12 +232,8 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun revert(n: Int): Int {
     var number = n
     var resultNumber = 0
-    var counter = 0.0
-    while (number != 0) {
-        number /= 10
-        counter++
-    }
-    number = n
+    var counter = digitNumber(number)
+
     while (number != 0) {
         resultNumber += ((number % 10) * 10.0.pow(counter - 1)).toInt()
         number /= 10
@@ -305,19 +301,12 @@ fun squareSequenceDigit(n: Int): Int {
     var number = 0
     var sqrOfNumber = 0
     var numeralInLine = 0
-    var counter1 = 0
-    var counter2: Int
+    var counter: Int
     while (numeralInLine < n) {
         number++
         sqrOfNumber = sqr(number)
-        while (sqrOfNumber != 0) {
-            sqrOfNumber /= 10
-            counter1++
-        }
-        sqrOfNumber = sqr(number)
-        counter2 = counter1
-        counter1 = 0
-        numeralInLine += counter2
+        counter = digitNumber(sqrOfNumber)
+        numeralInLine += counter
     }
     if (numeralInLine - n == 0) return sqrOfNumber % 10
     return (sqrOfNumber / (10.0.pow(abs(n - numeralInLine))).toInt()) % 10
@@ -336,8 +325,7 @@ fun fibSequenceDigit(n: Int): Int {
     var fib1 = 1
     var fib2 = 1
     var fibN = 0
-    var counter1 = 0
-    var counter2: Int
+    var counter: Int
     var numeralInLine = 3
 
     if (n == 1 || n == 2) return 1
@@ -346,14 +334,8 @@ fun fibSequenceDigit(n: Int): Int {
         fibN = fib1 + fib2
         fib1 = fib2
         fib2 = fibN
-        while (fibN != 0) {
-            fibN /= 10
-            counter1++
-        }
-        fibN = fib2
-        counter2 = counter1
-        counter1 = 0
-        numeralInLine += counter2
+        counter = digitNumber(fibN)
+        numeralInLine += counter
     }
     numeralInLine--
     if (numeralInLine - n == 0) return fibN % 10
