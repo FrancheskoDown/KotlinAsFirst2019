@@ -310,7 +310,7 @@ fun convertToString(n: Int, base: Int): String {
 fun decimal(digits: List<Int>, base: Int): Int {
     var result = 0
     val counter = digits.size - 1
-    for (i in digits.indices) result += (digits[i] * base.toDouble().pow(counter - i)).toInt()
+    for (i in digits.indices) result += digits[i] * (base.toDouble().pow(counter - i)).toInt()
     return result
 }
 
@@ -326,7 +326,14 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val list = mutableListOf<Int>()
+    for (counter in str.indices) {
+        if (str[counter] in '0'..'9') list.add(str[counter] - '0')
+        else list.add(str[counter] - 'a' + 10)
+    }
+    return decimal(list, base)
+}
 
 /**
  * Сложная
