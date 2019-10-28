@@ -365,4 +365,94 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val dischargeUnits = listOf1(
+        "",
+        "один",
+        "два",
+        "три",
+        "четыре",
+        "пять",
+        "шесть",
+        "семь",
+        "восемь",
+        "девять"
+    )
+    val dischargeDozens = listOf1(
+        "",
+        "десять",
+        "двадцать",
+        "тридцать",
+        "сорок",
+        "пятьдесят",
+        "шестьдесят",
+        "семьдесят",
+        "восемьдесят",
+        "девяносто"
+    )
+    val hundredsDischarge = listOf1(
+        "",
+        "сто",
+        "двести",
+        "триста",
+        "четыресто",
+        "пятьсот",
+        "шестьсот",
+        "семьсот",
+        "восемьсот",
+        "девятьсот"
+    )
+    val exception = listOf1(
+        "",
+        "одиннадцаить",
+        "двенадцать",
+        "тринадцать",
+        "четырнадцать",
+        "пятнадцать",
+        "шестнадцать",
+        "семнадцать",
+        "восемнадцать",
+        "девятнадцать"
+    )
+
+    val result = mutableListOf<String>()
+
+    val valueOfThousands = n / 1000
+    val hundredsDozensUnits = n % 1000
+
+    val lastNumeralOfThousands = when (valueOfThousands % 10) {
+        1 -> "одна"
+        2 -> "две"
+        else -> dischargeUnits[valueOfThousands % 10]
+    }
+
+    val formOfThousands = if (valueOfThousands % 100 in 11..14) "тысяч"
+    else when (valueOfThousands % 10) {
+        1 -> "тысяча"
+        in 2..4 -> "тысячи"
+        else -> "тысяч"
+    }
+
+    if (valueOfThousands > 0) {
+        result.add(hundredsDischarge[n / 100000])
+        if (valueOfThousands % 100 in 11..19) {
+            result.add(exception[valueOfThousands % 10])
+            result.add(formOfThousands)
+        } else {
+            result.add(dischargeDozens[n / 10000 % 10])
+            result.add(lastNumeralOfThousands)
+            result.add(formOfThousands)
+        }
+    }
+
+    if (hundredsDozensUnits > 0) {
+        result.add(hundredsDischarge[n / 100 % 10])
+        if (n % 100 in 11..19) {
+            result.add(exception[n % 10])
+        } else {
+            result.add(dischargeDozens[n / 10 % 10])
+            result.add(dischargeUnits[n % 10])
+        }
+    }
+    return result.filter { it != "" }.joinToString(" ")
+}
