@@ -141,6 +141,7 @@ class Tests {
         assertEquals(13, polynom(listOf(3, 2), 5))
         assertEquals(0, polynom(listOf(2, -3, 1), 1))
         assertEquals(45, polynom(listOf(-7, 6, 4, -4, 1), -2))
+        assertEquals(-1247348296, polynom(listOf(-1000, -1000, -1000, -1000, -1000, -1000), -20))
     }
 
     @Test
@@ -165,6 +166,7 @@ class Tests {
         assertEquals(listOf(2), factorize(2))
         assertEquals(listOf(3, 5, 5), factorize(75))
         assertEquals(listOf(2, 3, 3, 19), factorize(342))
+        assertEquals(listOf(2, 2, 185993), factorize(743972))
     }
 
     @Test

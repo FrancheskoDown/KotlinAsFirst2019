@@ -180,7 +180,8 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     var result = 0
-    for (counter in p.indices) result += (p[counter] * x.toDouble().pow(counter.toDouble())).toInt()
+    for (counter in p.indices)
+        result += p[counter] * x.toDouble().pow(counter).toInt()
     return result
 }
 
@@ -195,11 +196,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    var result = 1
-    for (counter in 1 until list.size) {
-        result += list[counter]
-        list[counter] = result
-    }
+    for (counter in 1 until list.size) list[counter] += list[counter - 1]
     return list
 }
 
@@ -220,9 +217,8 @@ fun factorize(n: Int): List<Int> {
             if (number % counter == 0) {
                 list.add(counter)
                 number /= counter
-                counter = 2
-            }
-            counter++
+            } else
+                counter++
         }
     }
     return list
