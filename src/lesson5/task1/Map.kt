@@ -170,7 +170,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         else
             if (result[name] != phone) result[name] += ", $phone"
     }
-    return result
+    return resule
 }
 
 /**
