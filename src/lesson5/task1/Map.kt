@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import sun.security.ec.point.ProjectivePoint
-
 /**
  * Пример
  *
@@ -95,9 +93,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val result = mutableMapOf<Int, MutableList<String>>()
-    for ((student, grades) in grades) {
-        if (grades in result) result[grades]?.add(student)
-        else result[grades] = mutableListOf(student)
+    for ((student, mark) in grades) {
+        if (mark in result) result[mark]?.add(student)
+        else result[mark] = mutableListOf(student)
     }
     return result
 }
@@ -132,7 +130,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     for ((i, j) in b)
         if (a[i] == b[i]) a.remove(i, j)
 }
@@ -144,7 +142,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя
