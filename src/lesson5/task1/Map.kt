@@ -271,7 +271,6 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
 
     return result
 }
-
 /**
  * Средняя
  *
