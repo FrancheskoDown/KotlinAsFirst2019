@@ -289,6 +289,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     val wordB = mutableMapOf<Char, Int>()
 
     for (counterA in words.indices) {
+        if (words[counterA] == "") return true
         for (charA in words[counterA]) {
             if (charA in wordA) wordA[charA]!!.plus(1)
             else wordA[charA] = 1
