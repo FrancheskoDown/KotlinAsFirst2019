@@ -285,17 +285,28 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val counter = mutableListOf<Char>()
+    val wordA = mutableMapOf<Char, Int>()
+    val wordB = mutableMapOf<Char, Int>()
 
-    for (string in words) {
-        val stringList = string.toList()
-        for (char in stringList) {
-            if (char !in counter) counter += char
+    for (counterA in words.indices) {
+        for (charA in words[counterA]) {
+            if (charA in wordA) wordA[charA]!!.plus(1)
+            else wordA[charA] = 1
+            for (counterB in counterA + 1 until words.size) {
+                for (charB in words[counterB]) {
+                    if (charB in wordB) wordB[charB]!!.plus(1)
+                    else wordB[charB] = 1
+                }
+                if (wordA == wordB) return true
+                else wordB.clear()
+            }
         }
+        wordA.clear()
     }
 
-    return true
+    return false
 }
+
 /**
  * Сложная
  *
@@ -340,7 +351,24 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    val numerals = mutableMapOf<Int, Int>()
+    val sortedList = list.sorted()
+
+    for (counter in list.indices) {
+        if (list[counter] !in numerals) numerals[list[counter]] = counter
+    }
+
+    for (i in sortedList.indices) {
+        val difference = number - sortedList[i]
+        if (number / 2 < sortedList[i] || list.isEmpty() || number == 0) return Pair(-1, -1)
+        else if (difference in numerals && numerals[sortedList[i]] != numerals[difference])
+            return Pair(numerals[sortedList[i]]!!, numerals[difference]!!)
+
+    }
+    return Pair(-1, -1)
+
+}
 
 /**
  * Очень сложная
