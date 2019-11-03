@@ -357,15 +357,15 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 
 
     for (counter in list.indices) {
-        if (list[counter] !in numerals)
-            numerals[list[counter]] = numerals.getOrDefault(list[counter], mutableSetOf()).plus(counter)
+        numerals[list[counter]] = numerals.getOrDefault(list[counter], mutableSetOf()).plus(counter)
     }
 
-    for (i in sortedList.indices) {
-        val difference = number - sortedList[i]
-        if (number / 2 < sortedList[i] || list.isEmpty()) return Pair(-1, -1)
-        else if (difference in numerals && numerals[sortedList[i]] != numerals[difference]) {
-            return Pair(numerals[sortedList[i]]!!.first(), numerals[difference]!!.last())
+    for (i in sortedList) {
+        val difference = number - i
+        if (number == 0 && i == 0) return Pair(numerals[i]!!.first(), numerals[i]!!.last())
+        if (number.toDouble() / 2 < i || list.isEmpty()) return Pair(-1, -1)
+        else if (difference in numerals && numerals[i] != numerals[difference]) {
+            return Pair(numerals[i]!!.first(), numerals[difference]!!.last())
         }
     }
     return Pair(-1, -1)
