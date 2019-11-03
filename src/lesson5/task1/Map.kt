@@ -352,20 +352,20 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val numerals = mutableMapOf<Int, Int>()
+    val numerals = HashMap<Int, Set<Int>>()
     val sortedList = list.sorted()
 
 
     for (counter in list.indices) {
-        if (list[counter] !in numerals) numerals[list[counter]] = counter
+        if (list[counter] !in numerals)
+            numerals[list[counter]] = numerals.getOrDefault(list[counter], mutableSetOf()).plus(counter)
     }
 
     for (i in sortedList.indices) {
-        if (number == 0 && sortedList[i] == 0 && sortedList[i + 1] == 0) return Pair(0, 1)
         val difference = number - sortedList[i]
         if (number / 2 < sortedList[i] || list.isEmpty()) return Pair(-1, -1)
         else if (difference in numerals && numerals[sortedList[i]] != numerals[difference]) {
-            return Pair(numerals[sortedList[i]]!!, numerals[difference]!!)
+            return Pair(numerals[sortedList[i]]!!.first(), numerals[difference]!!.last())
         }
     }
     return Pair(-1, -1)
