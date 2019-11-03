@@ -333,7 +333,29 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun knownFriends(friends: Map<String, Set<String>>, knownNames: MutableSet<String>, name: String) {
+    if (name in friends && !knownNames.containsAll(friends[name] ?: error("")))
+        for (knownName in friends[name] ?: error(""))
+            if (!knownNames.contains(knownName)) {
+                knownNames.add(knownName)
+                knownFriends(friends, knownNames, knownName)
+            }
+}
+
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val newFriends = friends.toMutableMap()
+
+    for ((name, known) in friends) {
+        for (knownName in known)
+            if (knownName !in newFriends) newFriends[knownName] = mutableSetOf()
+        val knownNames = mutableSetOf(name)
+        knownFriends(newFriends, knownNames, name)
+        knownNames.remove(name)
+        newFriends[name] = knownNames
+    }
+
+    return newFriends.toMap()
+}
 
 /**
  * Сложная
