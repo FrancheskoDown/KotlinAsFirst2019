@@ -297,7 +297,7 @@ fun hasAnagrams(words: List<String>): Boolean {
                     if (charB in wordB) wordB[charB]!!.plus(1)
                     else wordB[charB] = 1
                 }
-                if (wordA == wordB || (wordA.isEmpty() && wordB.isEmpty())) return true
+                if (wordA == wordB) return true
                 else wordB.clear()
             }
         }
@@ -355,16 +355,18 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val numerals = mutableMapOf<Int, Int>()
     val sortedList = list.sorted()
 
+
     for (counter in list.indices) {
         if (list[counter] !in numerals) numerals[list[counter]] = counter
     }
 
     for (i in sortedList.indices) {
+        if (number == 0 && sortedList[i] == 0 && sortedList[i + 1] == 0) return Pair(0, 1)
         val difference = number - sortedList[i]
         if (number / 2 < sortedList[i] || list.isEmpty()) return Pair(-1, -1)
-        else if (difference in numerals && numerals[sortedList[i]] != numerals[difference])
+        else if (difference in numerals && numerals[sortedList[i]] != numerals[difference]) {
             return Pair(numerals[sortedList[i]]!!, numerals[difference]!!)
-
+        }
     }
     return Pair(-1, -1)
 
