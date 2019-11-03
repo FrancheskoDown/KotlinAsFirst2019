@@ -363,7 +363,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 
     for (i in sortedList) {
         val difference = number - i
-        if (number == 0 && i == 0) return Pair(numerals[i]!!.first(), numerals[i]!!.last())
+        if (number == 0 && i == 0 && numerals[i]!!.size > 1) return Pair(numerals[i]!!.first(), numerals[i]!!.last())
         if (number.toDouble() / 2 < i || list.isEmpty()) return Pair(-1, -1)
         else if (difference in numerals && numerals[i] != numerals[difference]) {
             return Pair(numerals[i]!!.first(), numerals[difference]!!.last())
