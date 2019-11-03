@@ -297,7 +297,7 @@ fun hasAnagrams(words: List<String>): Boolean {
                     if (charB in wordB) wordB[charB]!!.plus(1)
                     else wordB[charB] = 1
                 }
-                if (wordA == wordB) return true
+                if (wordA == wordB || (wordA.isEmpty() && wordB.isEmpty())) return true
                 else wordB.clear()
             }
         }
