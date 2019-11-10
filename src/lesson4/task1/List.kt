@@ -7,7 +7,6 @@ import lesson1.task1.sqr
 import java.util.*
 import kotlin.math.sqrt
 import kotlin.math.pow
-import kotlin.collections.listOf as listOf1
 
 /**
  * Пример
@@ -16,12 +15,12 @@ import kotlin.collections.listOf as listOf1
  */
 fun sqRoots(y: Double) =
     when {
-        y < 0 -> listOf1()
-        y == 0.0 -> listOf1(0.0)
+        y < 0 -> listOf()
+        y == 0.0 -> listOf(0.0)
         else -> {
             val root = sqrt(y)
             // Результат!
-            listOf1(-root, root)
+            listOf(-root, root)
         }
     }
 
@@ -33,11 +32,11 @@ fun sqRoots(y: Double) =
  */
 fun biRoots(a: Double, b: Double, c: Double): List<Double> {
     if (a == 0.0) {
-        return if (b == 0.0) listOf1()
+        return if (b == 0.0) listOf()
         else sqRoots(-c / b)
     }
     val d = discriminant(a, b, c)
-    if (d < 0.0) return listOf1()
+    if (d < 0.0) return listOf()
     if (d == 0.0) return sqRoots(-b / (2 * a))
     val y1 = (-b + sqrt(d)) / (2 * a)
     val y2 = (-b - sqrt(d)) / (2 * a)
@@ -121,11 +120,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var result = 0.0
-    return if (v.isEmpty()) result
-    else {
-        for (i in v) result += sqr(i)
-        sqrt(result)
-    }
+    for (i in v) result += sqr(i)
+    return sqrt(result)
 }
 
 /**
@@ -133,10 +129,10 @@ fun abs(v: List<Double>): Double {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
+fun mean(list: List<Double>): Double =
+    if (list.isEmpty()) 0.0
     else list.sum() / list.size
-}
+
 
 /**
  * Средняя
@@ -147,7 +143,7 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val mid = list.sum() / list.size
+    val mid = mean(list)
     for ((counter) in list.withIndex()) list[counter] -= mid
 
     return list
@@ -212,14 +208,12 @@ fun factorize(n: Int): List<Int> {
     var counter = 2
     val list = mutableListOf<Int>()
     if (n in 2..9) return list + n
-    else {
-        while (number > 1) {
-            if (number % counter == 0) {
-                list.add(counter)
-                number /= counter
-            } else
-                counter++
-        }
+    while (number > 1) {
+        if (number % counter == 0) {
+            list.add(counter)
+            number /= counter
+        } else
+            counter++
     }
     return list
 }
@@ -248,7 +242,7 @@ fun convert(n: Int, base: Int): List<Int> {
         list.add(number % base)
         number /= base
     }
-    return if (list.isEmpty()) listOf1(0)
+    return if (list.isEmpty()) listOf(0)
     else list.reversed()
 }
 
@@ -269,32 +263,7 @@ fun convertToString(n: Int, base: Int): String {
     for (number in enter) {
         when (number) {
             in 0..9 -> exit.add(number)
-            10 -> exit.add("a")
-            11 -> exit.add("b")
-            12 -> exit.add("c")
-            13 -> exit.add("d")
-            14 -> exit.add("e")
-            15 -> exit.add("f")
-            16 -> exit.add("g")
-            17 -> exit.add("h")
-            18 -> exit.add("i")
-            19 -> exit.add("j")
-            20 -> exit.add("k")
-            21 -> exit.add("l")
-            22 -> exit.add("m")
-            23 -> exit.add("n")
-            24 -> exit.add("o")
-            25 -> exit.add("p")
-            26 -> exit.add("q")
-            27 -> exit.add("r")
-            28 -> exit.add("s")
-            29 -> exit.add("t")
-            30 -> exit.add("u")
-            31 -> exit.add("v")
-            32 -> exit.add("w")
-            33 -> exit.add("x")
-            34 -> exit.add("y")
-            35 -> exit.add("z")
+            in 10..35 -> exit.add('a' + number - 10)
         }
     }
     return exit.joinToString("")
@@ -347,8 +316,8 @@ fun roman(n: Int): String {
     var number = n
     var string = ""
     var counter = 0
-    val roman = listOf1("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M").reversed()
-    val arabic = listOf1("1", "4", "5", "9", "10", "40", "50", "90", "100", "400", "500", "900", "1000").reversed()
+    val roman = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M").reversed()
+    val arabic = listOf("1", "4", "5", "9", "10", "40", "50", "90", "100", "400", "500", "900", "1000").reversed()
     while (number != 0) {
         if (number >= arabic[counter].toInt()) {
             string += roman[counter]
@@ -366,7 +335,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val dischargeUnits = listOf1(
+    val dischargeUnits = listOf(
         "",
         "один",
         "два",
@@ -378,7 +347,7 @@ fun russian(n: Int): String {
         "восемь",
         "девять"
     )
-    val dischargeDozens = listOf1(
+    val dischargeDozens = listOf(
         "",
         "десять",
         "двадцать",
@@ -390,7 +359,7 @@ fun russian(n: Int): String {
         "восемьдесят",
         "девяносто"
     )
-    val hundredsDischarge = listOf1(
+    val hundredsDischarge = listOf(
         "",
         "сто",
         "двести",
@@ -402,7 +371,7 @@ fun russian(n: Int): String {
         "восемьсот",
         "девятьсот"
     )
-    val exception = listOf1(
+    val exception = listOf(
         "",
         "одиннадцать",
         "двенадцать",
