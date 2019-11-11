@@ -212,8 +212,8 @@ fun factorize(n: Int): List<Int> {
         if (number % counter == 0) {
             list.add(counter)
             number /= counter
-        }
-        counter++
+        } else
+            counter++
     }
     return list
 }
