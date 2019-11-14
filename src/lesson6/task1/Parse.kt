@@ -2,6 +2,10 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
+import java.lang.StringBuilder
+
 /**
  * Пример
  *
@@ -69,7 +73,44 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+
+    if (parts.size != 3) return ""
+
+    try {
+
+        val day = parts[0].toInt()
+        if (day !in 1..31) return ""
+
+        val month = when (parts[1]) {
+            "января" -> 1
+            "февраля" -> 2
+            "марта" -> 3
+            "апреля" -> 4
+            "мая" -> 5
+            "июня" -> 6
+            "июля" -> 7
+            "августа" -> 8
+            "сентября" -> 9
+            "октября" -> 10
+            "ноября" -> 11
+            "декабря" -> 12
+            else -> return ""
+        }
+        if (month == 2 && day > 29) return ""
+        else if (((month < 8 && month % 2 == 0) && day == 31) || ((month >= 8 && month % 2 != 0) && day == 31)) return ""
+
+
+        val year = parts[2].toInt()
+        if (year < 0) return ""
+        else if (((year % 400 != 0 && year % 100 == 0 || year % 4 != 0) && month == 2 && day == 29)) return ""
+
+        return String.format("%02d.%02d.%d", day, month, year)
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +122,49 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+
+    try {
+
+        if (parts.size != 3) return ""
+
+        val dayDigit = parts[0].toInt()
+        if (dayDigit !in 1..31) return ""
+
+        val day = dayDigit.toString()
+
+        val monthDigit = parts[1].toInt()
+        if (monthDigit == 2 && dayDigit > 29) return ""
+        else if (((monthDigit < 8 && monthDigit % 2 == 0) && dayDigit == 31) || ((monthDigit >= 8 && monthDigit % 2 != 0) && dayDigit == 31)) return ""
+
+        val month = when (monthDigit) {
+            1 -> "января"
+            2 -> "февраля"
+            3 -> "марта"
+            4 -> "апреля"
+            5 -> "мая"
+            6 -> "июня"
+            7 -> "июля"
+            8 -> "августа"
+            9 -> "сентября"
+            10 -> "октября"
+            11 -> "ноября"
+            12 -> "декабря"
+            else -> return ""
+        }
+
+        val yearDigit = parts[2].toInt()
+        if (yearDigit < 0) return ""
+        else if (((yearDigit % 400 != 0 && yearDigit % 100 == 0 || yearDigit % 4 != 0) && monthDigit == 2 && dayDigit == 29)) return ""
+
+        val year = parts[2]
+
+        return "$day $month $year"
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +180,42 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val allowedChars = listOf('+', '-', '(', ')', ' ')
+    val result = StringBuilder()
+    /*использую StringBuilder, так как result += "i", которое бы понадобилось в цикле, на каждой итерации создаёт
+    строку длиною на единицу больше чем на предыдущем шаге с последующим копированием символов из старой строки, что
+    значит что мы полуячаем арифметическую прогрессию для высчитывания количества затраченных символов, время выполнения
+    программы будет O(n^2), где n - длина строки, оператор .append() справляется с этой задачей куда лучше*/
+    var flagLeftParenthesis = false
+    var flagRightParenthesis = false
+    var flagCountryCode = false
+
+    if (phone.any { it !in allowedChars && !it.isDigit() }) return ""
+
+    for (i in phone) {
+        if (i == '+' || i.isDigit()) result.append(i)
+
+        if (i == '(') {
+            if (!flagLeftParenthesis && !flagRightParenthesis) {
+                flagLeftParenthesis = true
+            } else return ""
+        }
+
+        if (i == ')') {
+            if (!flagRightParenthesis && flagLeftParenthesis) flagRightParenthesis = true
+            else return ""
+        }
+
+        if (i.isDigit() && !flagRightParenthesis && flagLeftParenthesis) flagCountryCode = true
+
+        if (flagRightParenthesis && !flagCountryCode) return ""
+    }
+
+    if (result.toString() == "+") return ""
+
+    return result.toString()
+}
 
 /**
  * Средняя
@@ -109,7 +227,22 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val allowedChars = listOf(' ', '%', '-')
+    var maxLength = -1
+    val parts = jumps.split(" ")
+
+
+
+    if (jumps.all { !it.isDigit() } || jumps.any { it !in allowedChars && !it.isDigit() }) return -1
+
+
+
+    for (part in parts) {
+        if (part.toIntOrNull() != null && part.toInt() > maxLength) maxLength = part.toInt()
+    }
+return maxLength
+}
 
 /**
  * Сложная

@@ -132,7 +132,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     for ((i, j) in b)
         if (j == a[i]) a.remove(i, j)
 }
@@ -196,7 +196,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         else counter[name] = 1
     }
 
-    for ((name, i) in counter) result[name] = result[name]?.div(i)!!.toDouble()
+    for ((name, i) in counter) result[name] = result[name]?.div(i)!!
 
     return result
 }
@@ -239,7 +239,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.toString().toLowerCase().toSet().containsAll(word.toLowerCase().toSet())
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+    chars.toString().toLowerCase().toSet().containsAll(word.toLowerCase().toSet())
 
 /**
  * Средняя
@@ -275,8 +276,12 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     for (wordA in words.indices) {
+        val wordASet = words[wordA].toSet()
+
         for (wordB in wordA + 1 until words.size) {
-            if (words[wordA].toSet().containsAll(words[wordB].toSet()) || words[wordB].toSet().containsAll(words[wordA].toSet())) return true
+            val wordBSet = words[wordB].toSet()
+
+            if (wordASet == wordBSet) return true
         }
     }
 
