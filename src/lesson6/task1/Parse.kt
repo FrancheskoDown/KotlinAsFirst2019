@@ -107,7 +107,7 @@ fun dateStrToDigit(str: String): String {
         else if (((year % 400 != 0 && year % 100 == 0 || year % 4 != 0) && month == 2 && day == 29)) return ""
 
         return String.format("%02d.%02d.%d", day, month, year)
-    } catch (e: NumberFormatException) Ж
+    } catch (e: NumberFormatException) {
         return ""
     }
 }
