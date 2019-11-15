@@ -2,7 +2,6 @@
 
 package lesson6.task1
 
-import lesson2.task2.daysInMonth
 import java.lang.NumberFormatException
 import java.lang.StringBuilder
 
@@ -234,14 +233,14 @@ fun bestLongJump(jumps: String): Int {
 
 
 
-    if (jumps.all { !it.isDigit() } || jumps.any { it !in allowedChars && !it.isDigit() }) return -1
+    if (jumps.all { !it.isDigit() } || jumps.any { it !in allowedChars && !it.isDigit() }) return maxLength
 
 
 
     for (part in parts) {
         if (part.toIntOrNull() != null && part.toInt() > maxLength) maxLength = part.toInt()
     }
-return maxLength
+    return maxLength
 }
 
 /**
@@ -255,7 +254,23 @@ return maxLength
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val allowedChars = listOf('+', '-', ' ', '%')
+    val parts = jumps.split(" ")
+    var maxHigh = -1
+
+    if (jumps.all { !it.isDigit() } || jumps.any { it !in allowedChars && !it.isDigit() }) return maxHigh
+
+    for (i in parts.indices) {
+        if (i + 1 in parts.indices && parts[i + 1].contains('+')) {
+            if (parts[i].toIntOrNull() != null && parts[i].toInt() > maxHigh)
+                maxHigh = parts[i].toInt()
+        }
+    }
+
+    return maxHigh
+}
+
 
 /**
  * Сложная
@@ -266,7 +281,26 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val allowedChars = listOf('+', '-', ' ')
+    val parts = expression.split(" ")
+
+    require(!(expression.all { !it.isDigit() } || expression.any { it !in allowedChars && !it.isDigit() }))
+    requireNotNull(parts[0].toIntOrNull())
+
+    var result = parts[0].toInt()
+
+    for (i in parts.indices) {
+        require(!(parts[i].toCharArray().size > 1 && parts[i].toCharArray().any { !it.isDigit() }))
+        require(!(parts[i].toIntOrNull() == null && i + 1 in parts.indices && parts[i + 1].toIntOrNull() == null))
+        require(!(parts[i].toIntOrNull() != null && i + 1 in parts.indices && parts[i + 1].toIntOrNull() != null))
+
+        if (parts[i].toIntOrNull() != null && i - 1 in parts.indices && parts[i - 1].contains('+')) result += parts[i].toInt()
+        else if (parts[i].toIntOrNull() != null && i - 1 in parts.indices && parts[i - 1].contains('-')) result -= parts[i].toInt()
+    }
+
+    return result
+}
 
 /**
  * Сложная
@@ -277,7 +311,18 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val parts = str.split(" ")
+    var index = 0
+
+    if (str.isEmpty()) return -1
+
+    for (i in parts.indices) {
+        if (i + 1 in parts.indices && parts[i].toLowerCase() == parts[i + 1].toLowerCase()) return index + i
+        index += parts[i].length
+    }
+    return -1
+}
 
 /**
  * Сложная
@@ -290,7 +335,22 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val parts = description.split(";").joinToString("").split(" ")
+    var maxPrice = 0.0
+    var maxPriceIndex = 0
+
+    if (description.isEmpty()) return ""
+
+    for (i in 1..parts.size step 2) {
+        if (parts[i].toDoubleOrNull() != null && parts[i].toDouble() >= maxPrice) {
+            maxPrice = parts[i].toDouble()
+            maxPriceIndex = i - 1
+        }
+
+    }
+    return parts[maxPriceIndex]
+}
 
 /**
  * Сложная
