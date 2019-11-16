@@ -97,13 +97,9 @@ fun dateStrToDigit(str: String): String {
             "декабря" -> 12
             else -> return ""
         }
-        if (month == 2 && day > 29) return ""
-        else if (((month < 8 && month % 2 == 0) && day == 31) || ((month >= 8 && month % 2 != 0) && day == 31)) return ""
-
 
         val year = parts[2].toInt()
-        if (year < 0) return ""
-        else if (((year % 400 != 0 && year % 100 == 0 || year % 4 != 0) && month == 2 && day == 29)) return ""
+        if (year < 0 || day > lesson2.task2.daysInMonth(month, year)) return ""
 
         return String.format("%02d.%02d.%d", day, month, year)
     } catch (e: NumberFormatException) {
@@ -134,8 +130,6 @@ fun dateDigitToStr(digital: String): String {
         val day = dayDigit.toString()
 
         val monthDigit = parts[1].toInt()
-        if (monthDigit == 2 && dayDigit > 29) return ""
-        else if (((monthDigit < 8 && monthDigit % 2 == 0) && dayDigit == 31) || ((monthDigit >= 8 && monthDigit % 2 != 0) && dayDigit == 31)) return ""
 
         val month = when (monthDigit) {
             1 -> "января"
@@ -154,8 +148,7 @@ fun dateDigitToStr(digital: String): String {
         }
 
         val yearDigit = parts[2].toInt()
-        if (yearDigit < 0) return ""
-        else if (((yearDigit % 400 != 0 && yearDigit % 100 == 0 || yearDigit % 4 != 0) && monthDigit == 2 && dayDigit == 29)) return ""
+        if (yearDigit < 0 || dayDigit > lesson2.task2.daysInMonth(monthDigit, yearDigit)) return ""
 
         val year = parts[2]
 
@@ -182,10 +175,6 @@ fun dateDigitToStr(digital: String): String {
 fun flattenPhoneNumber(phone: String): String {
     val allowedChars = listOf('+', '-', '(', ')', ' ')
     val result = StringBuilder()
-    /*использую StringBuilder, так как result += "i", которое бы понадобилось в цикле, на каждой итерации создаёт
-    строку длиною на единицу больше чем на предыдущем шаге с последующим копированием символов из старой строки, что
-    значит что мы полуячаем арифметическую прогрессию для высчитывания количества затраченных символов, время выполнения
-    программы будет O(n^2), где n - длина строки, оператор .append() справляется с этой задачей куда лучше*/
     var flagLeftParenthesis = false
     var flagRightParenthesis = false
     var flagCountryCode = false
@@ -343,7 +332,9 @@ fun mostExpensive(description: String): String {
     if (description.isEmpty()) return ""
 
     for (i in 1..parts.size step 2) {
-        if (parts[i].toDoubleOrNull() != null && parts[i].toDouble() >= maxPrice) {
+        if (parts[i].toDoubleOrNull() == null) return ""
+
+        if (parts[i].toDouble() >= maxPrice) {
             maxPrice = parts[i].toDouble()
             maxPriceIndex = i - 1
         }

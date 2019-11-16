@@ -275,14 +275,14 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (wordA in words.indices) {
-        val wordASet = words[wordA].toSet()
+    val data = mutableMapOf<Int, Set<Char>>()
 
-        for (wordB in wordA + 1 until words.size) {
-            val wordBSet = words[wordB].toSet()
+    for (i in words.indices)
+        data[i] = data.getOrDefault(i, mutableSetOf()).plus(words[i].toSet())
 
-            if (wordASet == wordBSet) return true
-        }
+
+    for (j in data.keys) {
+        for (k in j + 1 until data.keys.size) if (data[j] == data[k]) return true
     }
 
     return false
@@ -417,7 +417,10 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
                 val getItem = costs[thing - 1] + backpack[(thing - 1) * (capacity + 1) + mass - masses[thing - 1]].first
                 backpack[thing * (capacity + 1) + mass] =
                     if (getItem > dontGetItem.first)
-                        Pair(getItem, (backpack[(thing - 1) * (capacity + 1) + mass - masses[thing - 1]].second + names[thing - 1]).toMutableSet())
+                        Pair(
+                            getItem,
+                            (backpack[(thing - 1) * (capacity + 1) + mass - masses[thing - 1]].second + names[thing - 1]).toMutableSet()
+                        )
                     else dontGetItem
             } else backpack[thing * (capacity + 1) + mass] = dontGetItem
         }
