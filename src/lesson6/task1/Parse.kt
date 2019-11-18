@@ -354,7 +354,92 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val allowedChars = listOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    var result = 0
+    var i = 1
+    var flag = true
+
+    if (roman.isEmpty() || roman.any() { it !in allowedChars }) return -1
+
+    // просмотр 1 знака
+    if (roman[0] == 'I' && ((i in roman.indices && roman[i] != 'V' && roman[i] != 'X') || roman.length == 1))
+        result += 1
+    if (roman[0] == 'V') result += 5
+    if (roman[0] == 'X' && ((i in roman.indices && roman[i] != 'L' && roman[i] != 'C') || roman.length == 1))
+        result += 10
+    if (roman[0] == 'L') result += 50
+    if (roman[0] == 'C' && ((i in roman.indices && roman[i] != 'D' && roman[i] != 'M') || roman.length == 1))
+        result += 100
+    if (roman[0] == 'D') result += 500
+    if (roman[0] == 'M') result += 1000
+
+    //Просмотр основной части
+    while (i in roman.indices) {
+        if (roman[i] == 'I' && i + 1 in roman.indices && roman[i + 1] != 'V' && roman[i + 1] != 'X') result += 1
+        if (roman[i] == 'I' && i + 1 in roman.indices && roman[i + 1] == 'V') {
+            flag = false
+            result += 4
+        }
+        if (roman[i] == 'I' && i + 1 in roman.indices && roman[i + 1] == 'X') {
+            flag = false
+            result += 9
+        }
+
+        if (roman[i] == 'V' && roman[i - 1] != 'I') result += 5
+        if (roman[i] == 'V' && roman[i - 1] == 'I' && i - 1 == 0) result += 4
+
+        if (roman[i] == 'X' && i + 1 in roman.indices && roman[i + 1] != 'L' && roman[i + 1] != 'C' && roman[i - 1] != 'I')
+            result += 10
+        if (roman[i] == 'X' && i + 1 in roman.indices && roman[i + 1] == 'L') {
+            flag = false
+            result += 40
+        }
+        if (roman[i] == 'X' && i + 1 in roman.indices && roman[i + 1] == 'C') {
+            flag = false
+            result += 90
+        }
+
+        if (roman[i] == 'L' && roman[i - 1] != 'X') result += 50
+        if (roman[i] == 'L' && roman[i - 1] == 'X' && i - 1 == 0) result += 40
+
+        if (roman[i] == 'C' && i + 1 in roman.indices && roman[i + 1] != 'D' && roman[i + 1] != 'M' && roman[i - 1] != 'X')
+            result += 100
+        if (roman[i] == 'C' && i + 1 in roman.indices && roman[i + 1] == 'D') {
+            flag = false
+            result += 400
+        }
+        if (roman[i] == 'C' && i + 1 in roman.indices && roman[i + 1] == 'M') {
+            flag = false
+            result += 900
+        }
+
+        if (roman[i] == 'D' && i - 1 in roman.indices && roman[i - 1] != 'C') result += 500
+        if (roman[i] == 'D' && roman[i - 1] == 'C' && i - 1 == 0) result += 400
+
+        if (roman[i] == 'M' && i - 1 in roman.indices && roman[i - 1] != 'C') result += 1000
+        if (roman[i] == 'M' && roman[i - 1] == 'C' && i - 1 == 0) result += 900
+
+        if (!flag) {
+            if (i + 2 !in roman.indices) break
+            i += 2
+        } else i++
+        flag = true
+    }
+
+    //Просмотр последнего знака
+    if (i == roman.length && roman.length != 1) {
+        if (roman[i - 1] == 'I') result += 1
+        if (roman[i - 1] == 'X') result += 10
+        if (roman[i - 1] == 'C') result += 100
+    }
+
+    return result
+
+    // Можно ли решить задачу оптимальнее, это худший способ решить задачу, используя кучу костылей, помоему,
+    // но, к сожалению,  я не смог придумать решения оптимальнее
+}
+
 
 /**
  * Очень сложная
