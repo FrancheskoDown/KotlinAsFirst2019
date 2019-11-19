@@ -355,12 +355,12 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    val allowedChars = listOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    val allowedChars = listOf('I', 'V', 'X', 'L', 'C', 'D', 'M')
     var result = 0
     var i = 1
     var flag = true
 
-    if (roman.isEmpty() || roman.any() { it !in allowedChars }) return -1
+    if (roman.isEmpty() || roman.any { it !in allowedChars }) return -1
 
     // просмотр 1 знака
     if (roman[0] == 'I' && ((i in roman.indices && roman[i] != 'V' && roman[i] != 'X') || roman.length == 1))
@@ -477,4 +477,64 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+fun cycle(command: Char, j: Int, currentCell: Int, storage: MutableList<Int>, commands: String): Int {
+    var counter = 1
+    var position = j
+
+    if (commands[position] == '[' && storage[currentCell] == 0) {
+        while (counter > 0) {
+            position++
+            if (commands[position] == '[') counter++
+            if (commands[position] == ']') counter--
+        }
+        return position
+    } else if (commands[position] == ']' && storage[currentCell] != 0) {
+        while (counter > 0) {
+            position--
+            if (commands[position] == ']') counter++
+            if (commands[position] == '[') counter--
+        }
+        return position
+    }
+    return position
+}
+
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val allowedChar = listOf('+', '-', '>', '<', ']', '[', ' ')
+    val storage = MutableList(cells) { 0 }
+    var currentCell = cells / 2
+    var counterParenthesis = 0
+    var validPair = true
+
+    require(!commands.any { it !in allowedChar })
+
+    // проверка  правильного построения скобок в строке
+    for (i in commands) {
+        if (i == '[') counterParenthesis++
+        if (i == ']') counterParenthesis--
+        if (counterParenthesis < 0) validPair = false
+    }
+    require(counterParenthesis == 0)
+    require(validPair)
+
+    //Конвеер
+    var j = 0
+    var l = 0
+    while (j in commands.indices && l in 0 until limit) {
+        if (commands[j] == '+') storage[currentCell]++
+        if (commands[j] == '-') storage[currentCell]--
+
+        if (commands[j] == '>' && currentCell + 1 in storage.indices) currentCell++
+        else check(!(commands[j] == '>' && currentCell + 1 !in storage.indices))
+
+        if (commands[j] == '<' && currentCell - 1 in storage.indices) currentCell--
+        else check(!(commands[j] == '<' && currentCell - 1 !in storage.indices))
+
+        if (commands[j] == '[' || commands[j] == ']') j = cycle(commands[j], j, currentCell, storage, commands)
+
+        l++
+        j++
+    }
+    return storage
+}
