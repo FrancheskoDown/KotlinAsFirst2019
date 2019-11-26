@@ -62,7 +62,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val text = File(inputName).readText().toLowerCase().split(Regex("""\s"""))
     for (line in text) {
         if (line.isEmpty()) continue
-        val words = line.split(Regex("""[^а-я.-]+"""))
+        val words = line.split(Regex("""[^а-я.-]+\\"""))
         for (key in dataBase.keys) {
             val currentKey = key.toLowerCase()
             for (word in words) {

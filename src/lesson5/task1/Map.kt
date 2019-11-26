@@ -280,12 +280,12 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     if (words.size < 2 || words.isEmpty()) return false
+    if (words.any { it == "" }) return true
 
     val data = words.toMutableSet()
     for (i in data) {
-        for (k in data) {
-            if (i == "" && k == "") return true
-            if ((k.all { it in i } || i.all { it in k }) && k != i) return true
+        for (k in data - i) {
+            if (k.all { it in i } || i.all { it in k }) return true
         }
     }
 
