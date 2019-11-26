@@ -331,7 +331,7 @@ fun mostExpensive(description: String): String {
 
     if (description.isEmpty()) return ""
 
-    for (i in 1 ..parts.size step 2) {
+    for (i in 1..parts.size step 2) {
         if (parts[i].toDoubleOrNull() == null) return ""
 
         if (parts[i].toDouble() >= maxPrice) {
