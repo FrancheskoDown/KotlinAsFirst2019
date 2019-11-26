@@ -279,18 +279,19 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val data = mutableMapOf<Int, Set<Char>>()
+    if (words.size < 2 || words.isEmpty()) return false
 
-    for (i in words.indices)
-        data[i] = data.getOrDefault(i, mutableSetOf()).plus(words[i].toSet())
-
-
-    for (j in data.keys) {
-        for (k in j + 1 until data.keys.size) if (data[j] == data[k]) return true
+    val data = words.toMutableSet()
+    for (i in data) {
+        for (k in data) {
+            if (i == "" && k == "") return true
+            if ((k.all { it in i } || i.all { it in k }) && k != i) return true
+        }
     }
 
     return false
 }
+
 
 /**
  * Сложная

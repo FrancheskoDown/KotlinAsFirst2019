@@ -280,7 +280,7 @@ fun plusMinus(expression: String): Int {
     var result = parts[0].toInt()
 
     for (i in parts.indices) {
-        require(!(parts[i].toCharArray().size > 1 && parts[i].toCharArray().any { !it.isDigit() }))
+        require(!(parts[i].toList().size > 1 && parts[i].toList().any { !it.isDigit() }))
         require(!(parts[i].toIntOrNull() == null && i + 1 in parts.indices && parts[i + 1].toIntOrNull() == null))
         require(!(parts[i].toIntOrNull() != null && i + 1 in parts.indices && parts[i + 1].toIntOrNull() != null))
 
@@ -301,13 +301,13 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val parts = str.split(" ")
+    val parts = str.toLowerCase().split(" ")
     var index = 0
 
     if (str.isEmpty()) return -1
 
     for (i in parts.indices) {
-        if (i + 1 in parts.indices && parts[i].toLowerCase() == parts[i + 1].toLowerCase()) return index + i
+        if (i + 1 in parts.indices && parts[i] == parts[i + 1]) return index + i
         index += parts[i].length
     }
     return -1
