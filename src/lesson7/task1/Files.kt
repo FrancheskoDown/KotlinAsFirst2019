@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson3.task1.squareBetweenExists
 import java.io.File
 
 /**
@@ -66,7 +67,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (word in words) {
             for (key in dataBase.keys) {
                 val currentKey = key.toLowerCase()
-                if (currentKey.all { it in word }) {
+                if (word.contains(currentKey)) {
                     if (currentKey.length == word.length) dataBase[key] = dataBase[key]!!.plus(1)
                     else if (currentKey.length < word.length) {
                         val wordChars = word.toList()
@@ -84,7 +85,6 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 
     return dataBase
 }
-
 
 /**
  * Средняя
