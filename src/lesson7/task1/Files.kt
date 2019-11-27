@@ -2,8 +2,9 @@
 
 package lesson7.task1
 
-import lesson3.task1.squareBetweenExists
+import java.io.BufferedWriter
 import java.io.File
+import kotlin.text.StringBuilder
 
 /**
  * Пример
@@ -56,7 +57,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     //Создание датабазы
-    val dataBase: MutableMap<String, Int> = mutableMapOf<String, Int>()
+    val dataBase: MutableMap<String, Int> = mutableMapOf()
     for (i in substrings) dataBase[i] = 0
 
     //Работа с файлом
@@ -68,20 +69,15 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
             for (key in dataBase.keys) {
                 val currentKey = key.toLowerCase()
                 if (word.contains(currentKey)) {
-                    if (currentKey.length == word.length) dataBase[key] = dataBase[key]!!.plus(1)
-                    else if (currentKey.length < word.length) {
-                        val wordChars = word.toList()
-                        for (l in wordChars.indices) {
-                            if (word[l] == currentKey[0] && l + currentKey.length - 1 in wordChars.indices && word[l + currentKey.length - 1] == currentKey.last()) {
-                                dataBase[key] = dataBase[key]!!.plus(1)
-                            }
-                        }
+                    val wordChars = word.toList()
+                    for (l in wordChars.indices) {
+                        if (word[l] == currentKey[0] && l + currentKey.length - 1 in wordChars.indices && word[l + currentKey.length - 1] == currentKey.last())
+                            dataBase[key] = dataBase[key]!!.plus(1)
                     }
                 }
             }
         }
     }
-
 
     return dataBase
 }
@@ -99,9 +95,42 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
-fun sibilants(inputName: String, outputName: String) {
-    TODO()
+fun corrector(line: String): String {
+    val fixer = StringBuilder()
+    val searchLetters = listOf('ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ')
+    val searchErrors = listOf('ы', 'я', 'ю', 'Ы', 'Я', 'Ю')
+
+    for (index in line.indices) {
+        if (line[index] in searchErrors && index - 1 in line.indices && line[index - 1] in searchLetters) {
+            val correctedLetter = when (line[index]) {
+                'ы' -> 'и'
+                'я' -> 'а'
+                'ю' -> 'у'
+                'Ы' -> 'И'
+                'Я' -> 'А'
+                'Ю' -> 'У'
+                else -> ' '
+            }
+            fixer.append(correctedLetter)
+        } else {
+            fixer.append(line[index])
+        }
+    }
+    return fixer.toString()
 }
+
+fun sibilants(inputName: String, outputName: String) {
+    val outputStream = File(outputName).bufferedWriter()
+
+    for (line in File(inputName).readLines()) {
+        val length = line.length
+        if (line.isEmpty()) outputStream.newLine()
+        outputStream.write(corrector(line))
+        outputStream.newLine()
+    }
+    outputStream.close()
+}
+
 
 /**
  * Средняя
