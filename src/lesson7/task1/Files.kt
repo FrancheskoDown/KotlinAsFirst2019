@@ -69,7 +69,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
                 if (currentKey.all { it in word }) {
                     if (currentKey.length == word.length) dataBase[key] = dataBase[key]!!.plus(1)
                     else if (currentKey.length < word.length) {
-                        val wordChars = word.toList(
+                        val wordChars = word.toList()
                         for (l in wordChars.indices) {
                             if (word[l] == currentKey[0] && l + currentKey.length - 1 in wordChars.indices && word[l + currentKey.length - 1] == currentKey.last()) {
                                 dataBase[key] = dataBase[key]!!.plus(1)
