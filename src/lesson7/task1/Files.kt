@@ -126,6 +126,11 @@ fun corrector(line: String): String {
 fun sibilants(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
 
+    if (File(inputName).readText() == "") {
+        outputStream.write("")
+        outputStream.close()
+    }
+
     for (line in File(inputName).readLines()) {
         if (line.isEmpty()) outputStream.newLine()
         outputStream.write(corrector(line))
@@ -167,8 +172,8 @@ fun centerFile(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
     val maxLineLength = text.maxBy { it.trim().length }!!.trim().length
 
-    if (File(inputName).readText().isEmpty()) {
-        outputStream.newLine()
+    if (File(inputName).readText() == "") {
+        outputStream.write("")
         outputStream.close()
     }
 
