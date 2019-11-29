@@ -322,7 +322,7 @@ fun writer(line: String, rules: Map<Char, String>, flag: Boolean): String {
         val currentRule = rules[currentChar]
         if (currentChar in rules.keys) {
             if (index == 0 && !flag) {
-                if (currentRule?.length == 1) writer.append(currentRule?.toUpperCase())
+                if (currentRule?.length == 1) writer.append(currentRule.toUpperCase())
                 else {
                     for (i in currentRule!!.indices) {
                         if (i == 0) writer.append(currentRule[i].toUpperCase())
