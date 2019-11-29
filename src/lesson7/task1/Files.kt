@@ -72,8 +72,11 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
                 if (word.contains(currentKey)) {
                     val wordChars = word.toList()
                     for (l in wordChars.indices) {
-                        if (word[l] == currentKey[0] && l + currentKey.length - 1 in wordChars.indices && word[l + currentKey.length - 1] == currentKey.last())
-                            dataBase[key] = dataBase[key]!!.plus(1)
+                        if (word[l] == currentKey[0] && l + currentKey.length - 1 in wordChars.indices) {
+                            val list = mutableListOf<Char>()
+                            for (t in l until l + currentKey.length) list.add(wordChars[t])
+                            if (list == currentKey.toList()) dataBase[key] = dataBase[key]!!.plus(1)
+                        }
                     }
                 }
             }
@@ -164,6 +167,11 @@ fun centerFile(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
     val maxLineLength = text.maxBy { it.trim().length }!!.trim().length
 
+    if (File(inputName).readText().isEmpty()) {
+        outputStream.newLine()
+        outputStream.close()
+    }
+
     for (line in text) {
         outputStream.write(spacer(maxLineLength, line))
         outputStream.newLine()
@@ -172,6 +180,7 @@ fun centerFile(inputName: String, outputName: String) {
 
     outputStream.close()
 }
+
 
 /**
  * Сложная
@@ -221,6 +230,10 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val maxLineLength = text.maxBy { it.trim().length }!!.trim().length
 
     for (line in text) {
+        if (line.isEmpty()) {
+            outputStream.newLine()
+            continue
+        }
 
         val lineFixed = line.trim()
         if (lineFixed == line.filter { it != ' ' }) {
