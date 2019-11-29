@@ -319,22 +319,18 @@ fun writer(line: String, rules: Map<Char, String>, flag: Boolean): String {
 
     for (index in line.indices) {
         val currentChar = line[index]
+        val currentRule = rules[currentChar]
         if (currentChar in rules.keys) {
             if (index == 0 && !flag) {
-                if (rules[currentChar]?.length == 1) writer.append(rules[currentChar]?.toUpperCase())
+                if (currentRule?.length == 1) writer.append(currentRule?.toUpperCase())
                 else {
-                    val currentRule = rules[currentChar]
                     for (i in currentRule!!.indices) {
                         if (i == 0) writer.append(currentRule[i].toUpperCase())
                         else writer.append(currentRule[i])
                     }
                 }
-            } else writer.append(rules[line[index]])
-        } else {
-            if (index == 0 && !flag) {
-                writer.append(line[index].toUpperCase())
-            } else writer.append(line[index])
-        }
+            } else writer.append(currentRule)
+        } else writer.append(line[index])
     }
 
     return writer.toString()
@@ -355,7 +351,6 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
             flag = true
         } else {
             outputStream.write(writer(line.toLowerCase(), rules, true))
-            flag = true
             outputStream.newLine()
         }
     }
