@@ -126,11 +126,6 @@ fun corrector(line: String): String {
 fun sibilants(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
 
-    if (File(inputName).readText() == "") {
-        outputStream.write("")
-        outputStream.close()
-    }
-
     for (line in File(inputName).readLines()) {
         if (line.isEmpty()) outputStream.newLine()
         outputStream.write(corrector(line))
@@ -318,8 +313,53 @@ fun top20Words(inputName: String): Map<String, Int> {
  *
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
+fun writer(line: String, rules: Map<Char, String>, flag: Boolean): String {
+    val writer = StringBuilder()
+
+
+    for (index in line.indices) {
+        val currentChar = line[index]
+        if (currentChar in rules.keys) {
+            if (index == 0 && !flag) {
+                if (rules[currentChar]?.length == 1) writer.append(rules[currentChar]?.toUpperCase())
+                else {
+                    val currentRule = rules[currentChar]
+                    for (i in currentRule!!.indices) {
+                        if (i == 0) writer.append(currentRule[i].toUpperCase())
+                        else writer.append(currentRule[i])
+                    }
+                }
+            } else writer.append(rules[line[index]])
+        } else {
+            if (index == 0 && !flag) {
+                writer.append(line[index].toUpperCase())
+            } else writer.append(line[index])
+        }
+    }
+
+    return writer.toString()
+}
+
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    val text = File(inputName).readLines()
+    val outputStream = File(outputName).bufferedWriter()
+    val rules = mutableMapOf<Char, String>()
+    var flag = false
+
+    for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
+
+    for (line in text) {
+        if (!flag) {
+            outputStream.write(writer(line.toLowerCase(), rules, false))
+            outputStream.newLine()
+            flag = true
+        } else {
+            outputStream.write(writer(line.toLowerCase(), rules, true))
+            flag = true
+            outputStream.newLine()
+        }
+    }
+    outputStream.close()
 }
 
 /**
