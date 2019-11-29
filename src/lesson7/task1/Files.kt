@@ -5,8 +5,6 @@ package lesson7.task1
 
 import ru.spbstu.wheels.toMap
 import java.io.File
-import java.util.*
-import kotlin.math.absoluteValue
 import kotlin.text.StringBuilder
 
 /**
@@ -263,6 +261,11 @@ fun top20Words(inputName: String): Map<String, Int> {
         if (word.isNotEmpty()) dataBase[word] = dataBase.getOrDefault(word, 0).plus(1)
 
     return dataBase.entries.sortedWith(compareBy { it.value }).reversed().take(20).toMap()
+
+    /*
+    Можно ли как то адекватно сортировать по значениям, я пытался найти, нашёл только treeMap,
+    но для неё тоже надо писать отдельные условия сортировки
+    */
 }
 
 /**
