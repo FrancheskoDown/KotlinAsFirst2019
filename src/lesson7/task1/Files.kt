@@ -113,7 +113,7 @@ fun corrector(line: String): String {
                 'Ы' -> 'И'
                 'Я' -> 'А'
                 'Ю' -> 'У'
-                else -> ' '
+                else -> line[index]
             }
             fixer.append(correctedLetter)
         } else {
@@ -157,11 +157,11 @@ fun sibilants(inputName: String, outputName: String) {
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
  *
  */
-fun spacer(maxLineLength: Int, line: String): String {
+fun spacer(maxLineLength: Int?, line: String): String {
     val fixer = StringBuilder()
     val lengthOfCurrentString = line.trim().length
 
-    for (i in 1..(maxLineLength - lengthOfCurrentString) / 2) fixer.append(' ')
+    for (i in 1..(maxLineLength!! - lengthOfCurrentString) / 2) fixer.append(' ')
     fixer.append(line.trim())
 
     return fixer.toString()
@@ -170,12 +170,9 @@ fun spacer(maxLineLength: Int, line: String): String {
 fun centerFile(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     val text = File(inputName).readLines()
-    val maxLineLength = text.maxBy { it.trim().length }!!.trim().length
 
-    if (File(inputName).readText() == "") {
-        outputStream.write("")
-        outputStream.close()
-    }
+    val maxLineLength = text.maxBy { it.trim().length }?.trim()?.length
+
 
     for (line in text) {
         outputStream.write(spacer(maxLineLength, line))
@@ -214,12 +211,12 @@ fun centerFile(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
-fun fixer(lineFixed: String, maxLineLength: Int): String {
+fun fixer(lineFixed: String, maxLineLength: Int?): String {
     val words = lineFixed.split(" ").filter { it != "" }.toMutableList()
     var currentLength = words.joinToString("").length
     var wordIndex = 0
 
-    while (currentLength < maxLineLength) {
+    while (currentLength < maxLineLength!!) {
         if (wordIndex == words.lastIndex) wordIndex = 0
         words[wordIndex] += " "
         wordIndex++
@@ -232,7 +229,7 @@ fun fixer(lineFixed: String, maxLineLength: Int): String {
 fun alignFileByWidth(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     val text = File(inputName).readLines()
-    val maxLineLength = text.maxBy { it.trim().length }!!.trim().length
+    val maxLineLength = text.maxBy { it.trim().length }?.trim()?.length
 
     for (line in text) {
         if (line.isEmpty()) {
