@@ -330,15 +330,15 @@ fun writer(line: String, rules: Map<Char, String>): String {
 }
 
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val text = File(inputName).readLines()
+    val text = File(inputName).readText().split(" ")
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
 
     for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
 
-    for (line in text) {
-        outputStream.write(writer(line, rules))
-        outputStream.newLine()
+    for (word in text) {
+        outputStream.write(writer(word, rules))
+        if (word == "\n") outputStream.newLine()
     }
     outputStream.close()
 }
