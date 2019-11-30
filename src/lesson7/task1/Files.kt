@@ -437,9 +437,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     stack.push("<body>")
     outputStream.write(stack.peek())
     outputStream.newLine()
-    stack.push("<p>")
-    outputStream.write(stack.peek())
-    outputStream.newLine()
 
     //Анализ текста
     for (currentLineIndex in text.indices) {
@@ -448,6 +445,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var currentCharIndex = 0
 
         //Расставление абзацев
+        if (currentLineIndex == 0) {
+            stack.push("<p>")
+            outputStream.write(stack.peek())
+            outputStream.newLine()
+        }
         if (currentLine.isEmpty()) {
             outputStream.write("</p>")
             stack.pop()
