@@ -499,16 +499,22 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
                 //Вход в зачёркнутый текст
                 '~' -> {
-                    if (stack.peek() != "<s>") {
-                        stack.push("<s>")
-                        outputStream.write(stack.peek())
+                    var nextChar = ' '
+                    if (currentCharIndex + 1 < currentLength) nextChar = currentLine[currentCharIndex + 1]
+                    if (nextChar == '~') {
+                        if (stack.peek() != "<s>") {
+                            stack.push("<s>")
+                            outputStream.write(stack.peek())
+                        } else {
+                            outputStream.write("</s>")
+                            stack.pop()
+                        }
+                        currentCharIndex++
                     } else {
-                        outputStream.write("</s>")
-                        stack.pop()
+                        outputStream.write(currentChar.toString())
+                        currentCharIndex++
                     }
-                    currentCharIndex++
                 }
-
                 // запись строки
                 else -> outputStream.write(currentChar.toString())
             }
