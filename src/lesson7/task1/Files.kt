@@ -427,10 +427,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
     val textSize = text.size
     val outputStream = File(outputName).bufferedWriter()
-    val end = listOf("</p>", "</body>", "</html>")
     val stack = Stack<String>()
 
 
+    //Начальная шапка
     stack.push("<html>")
     outputStream.write(stack.peek())
     outputStream.newLine()
@@ -441,11 +441,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     outputStream.write(stack.peek())
     outputStream.newLine()
 
+    //Анализ текста
     for (currentLineIndex in text.indices) {
         val currentLine = text[currentLineIndex]
         val currentLength = currentLine.length
         var currentCharIndex = 0
 
+        //Расставление абзацев
         if (currentLine.isEmpty()) {
 
             if (stack.peek() != "<p>") {
@@ -471,12 +473,16 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             continue
         }
 
+        //Анализ знаков
         while (currentCharIndex < currentLength) {
-
             when (val currentChar = currentLine[currentCharIndex]) {
+
+                //***
                 '*' -> {
                     var nextChar = ' '
                     if (currentCharIndex + 1 < currentLength) nextChar = currentLine[currentCharIndex + 1]
+
+                    //вход в полужирный текст
                     if (nextChar == '*') {
                         if (stack.peek() != "<b>") {
                             stack.push("<b>")
@@ -486,6 +492,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                             stack.pop()
                         }
                         currentCharIndex++
+
+                        // Вход в курсив
                     } else {
                         if (stack.peek() != "<i>") {
                             stack.push("<i>")
@@ -496,6 +504,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         }
                     }
                 }
+
+                //Вход в зачёркнутый текст
                 '~' -> {
                     if (stack.peek() != "<s>"){
                         stack.push("<s>")
@@ -506,6 +516,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                     currentCharIndex++
                 }
+
+                // запись строки
                 else -> outputStream.write(currentChar.toString())
             }
             currentCharIndex++
@@ -513,10 +525,16 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         outputStream.newLine()
     }
 
+    //Конечная шапка
+    outputStream.write("</p>")
+    outputStream.newLine()
     stack.pop()
+    outputStream.write("</body>")
+    outputStream.newLine()
     stack.pop()
+    outputStream.write("</html>")
+    outputStream.newLine()
     stack.pop()
-    outputStream.write(end.joinToString("\n"))
 
     outputStream.close()
 }
