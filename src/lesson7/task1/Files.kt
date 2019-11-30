@@ -5,6 +5,7 @@ package lesson7.task1
 
 import ru.spbstu.wheels.toMap
 import java.io.File
+import java.util.*
 import kotlin.text.StringBuilder
 
 /**
@@ -316,7 +317,6 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun writer(line: String, rules: Map<Char, String>): String {
     val writer = StringBuilder()
 
-
     for (index in line.indices) {
         val currentChar = line[index]
         val currentRule = rules[currentChar.toLowerCase()].toString()
@@ -372,7 +372,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
         File(inputName).readText().split(Regex("""\s""")).filter { it.toLowerCase().toSet().size == it.length }
     val outputStream = File(outputName).bufferedWriter()
     val maxLength = words.maxBy { it.length }?.length
-    val top = words.filter { it.length == maxLength}
+    val top = words.filter { it.length == maxLength }
 
     outputStream.write(top.joinToString(", "))
     outputStream.close()
@@ -424,7 +424,101 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val text = File(inputName).readLines()
+    val textSize = text.size
+    val outputStream = File(outputName).bufferedWriter()
+    val end = listOf("</p>", "</body>", "</html>")
+    val stack = Stack<String>()
+
+
+    stack.push("<html>")
+    outputStream.write(stack.peek())
+    outputStream.newLine()
+    stack.push("<body>")
+    outputStream.write(stack.peek())
+    outputStream.newLine()
+    stack.push("<p>")
+    outputStream.write(stack.peek())
+    outputStream.newLine()
+
+    for (currentLineIndex in text.indices) {
+        val currentLine = text[currentLineIndex]
+        val currentLength = currentLine.length
+        var currentCharIndex = 0
+
+        if (currentLine.isEmpty()) {
+
+            if (stack.peek() != "<p>") {
+                stack.push("<p>")
+                outputStream.write(stack.peek())
+            } else {
+                outputStream.write("</p>")
+                stack.pop()
+            }
+
+            var nextLineIndex = currentLineIndex + 1
+
+            while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
+            if (nextLineIndex < textSize) {
+                if (stack.peek() != "<p>") {
+                    stack.push("<p>")
+                    outputStream.write(stack.peek())
+                } else {
+                    outputStream.write("</p>")
+                    stack.pop()
+                }
+            }
+            continue
+        }
+
+        while (currentCharIndex < currentLength) {
+
+            when (val currentChar = currentLine[currentCharIndex]) {
+                '*' -> {
+                    var nextChar = ' '
+                    if (currentCharIndex + 1 < currentLength) nextChar = currentLine[currentCharIndex + 1]
+                    if (nextChar == '*') {
+                        if (stack.peek() != "<b>") {
+                            stack.push("<b>")
+                            outputStream.write(stack.peek())
+                        } else {
+                            outputStream.write("</b>")
+                            stack.pop()
+                        }
+                        currentCharIndex++
+                    } else {
+                        if (stack.peek() != "<i>") {
+                            stack.push("<i>")
+                            outputStream.write(stack.peek())
+                        } else {
+                            outputStream.write("</i>")
+                            stack.pop()
+                        }
+                    }
+                }
+                '~' -> {
+                    if (stack.peek() != "<s>"){
+                        stack.push("<s>")
+                        outputStream.write(stack.peek())
+                    } else {
+                        outputStream.write("</s>")
+                        stack.pop()
+                    }
+                    currentCharIndex++
+                }
+                else -> outputStream.write(currentChar.toString())
+            }
+            currentCharIndex++
+        }
+        outputStream.newLine()
+    }
+
+    stack.pop()
+    stack.pop()
+    stack.pop()
+    outputStream.write(end.joinToString("\n"))
+
+    outputStream.close()
 }
 
 /**
