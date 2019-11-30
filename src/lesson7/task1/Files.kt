@@ -313,23 +313,17 @@ fun top20Words(inputName: String): Map<String, Int> {
  *
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
-fun writer(line: String, rules: Map<Char, String>, flag: Boolean): String {
+fun writer(line: String, rules: Map<Char, String>): String {
     val writer = StringBuilder()
-    var firstRemark = false
 
 
     for (index in line.indices) {
         val currentChar = line[index]
         val currentRule = rules[currentChar.toLowerCase()].toString()
-        if (currentChar.toLowerCase() in rules.keys) {
-            if (!flag && !firstRemark) {
-                firstRemark = true
-                for (i in currentRule.indices) {
-                    if (i == 0) writer.append(currentRule[i].toUpperCase())
-                    else writer.append(currentRule[i])
-                }
-            } else writer.append(currentRule)
-        } else writer.append(currentChar)
+        if (currentChar.toLowerCase() in rules.keys)
+            if (currentChar.toLowerCase() != currentChar) writer.append(currentRule.capitalize())
+            else writer.append(currentRule)
+        else writer.append(currentChar)
     }
 
     return writer.toString()
@@ -339,19 +333,12 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val text = File(inputName).readLines()
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
-    var flag = false
 
     for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
 
     for (line in text) {
-        if (!flag) {
-            outputStream.write(writer(line, rules, false))
-            outputStream.newLine()
-            flag = true
-        } else {
-            outputStream.write(writer(line, rules, true))
-            outputStream.newLine()
-        }
+        outputStream.write(writer(line, rules))
+        outputStream.newLine()
     }
     outputStream.close()
 }
