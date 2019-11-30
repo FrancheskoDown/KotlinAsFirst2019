@@ -449,14 +449,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
         //Расставление абзацев
         if (currentLine.isEmpty()) {
-
-            if (stack.peek() != "<p>") {
-                stack.push("<p>")
-                outputStream.write(stack.peek())
-            } else {
-                outputStream.write("</p>")
-                stack.pop()
-            }
+            outputStream.write("</p>")
+            stack.pop()
 
             var nextLineIndex = currentLineIndex + 1
 
@@ -507,7 +501,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
                 //Вход в зачёркнутый текст
                 '~' -> {
-                    if (stack.peek() != "<s>"){
+                    if (stack.peek() != "<s>") {
                         stack.push("<s>")
                         outputStream.write(stack.peek())
                     } else {
