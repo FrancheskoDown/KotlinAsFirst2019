@@ -449,20 +449,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
         //Расставление абзацев
         if (currentLine.isEmpty()) {
-            outputStream.write("</p>")
-            stack.pop()
 
             var nextLineIndex = currentLineIndex + 1
 
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
-            if (stack.peek() != "<p>") {
-                stack.push("<p>")
-                outputStream.write(stack.peek())
-            } else {
-                outputStream.write("</p>")
-                stack.pop()
-            }
-            continue
+            outputStream.write("</p><p>") // Пытался сделать через стак в итоге не вышло
         }
 
         //Анализ знаков
