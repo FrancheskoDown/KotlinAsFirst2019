@@ -4,6 +4,7 @@ package lesson7.task1
 
 
 import ru.spbstu.wheels.toMap
+import kotlin.math.pow
 import java.io.File
 import java.util.*
 import kotlin.text.StringBuilder
@@ -454,6 +455,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
             if (pair) outputStream.write("</p><p>")
+            // попытался сделать через стек ничего не вышло, да и так особо ничего не вышло :/
             continue
         }
         pair = true
@@ -696,6 +698,202 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val dividendString = lhv.toString()
+    var numberOfDividendBits = dividendString.length //Количество разрядов в делителе
+    val onePointSubtrahend = lhv / rhv // Результат деления
+    val iterations = onePointSubtrahend.toString().length // количество столбцов под уголком
+    var spacesCounter = 0 // счётчик пробелов
+
+    outputStream.write(" $dividendString | $rhv") // Шапка уголка
+    outputStream.newLine()
+
+    if (lhv > rhv) {
+        var splitter = (10.0.pow(numberOfDividendBits)).toInt() //Отсекатель
+        var bite = lhv / splitter //Текущее отсечение
+        var remains = bite % rhv // Остаток от деления
+        var subtrahend = lhv - remains //делитель в деление с остатком
+
+        while (remains == bite) { //Поиск первой части в числе делящейся на делитель
+            numberOfDividendBits--
+            splitter = (10.0.pow(numberOfDividendBits)).toInt()
+            bite = lhv / splitter
+            remains = bite % rhv
+            subtrahend = bite - remains
+        }
+        spacesCounter += bite.toString().length
+        outputStream.write("-$subtrahend")
+
+        var subtrahendLength = subtrahend.toString().length // длина делителья в деление с остатком
+        while (subtrahendLength < lhv.toString().length + 3) { // переход в нижнюю часть уголка
+            outputStream.write(" ")
+            subtrahendLength++
+        }
+        outputStream.write("$onePointSubtrahend") // забив результата деления в уголок
+        outputStream.newLine()
+
+        var counter = 0
+        while (counter <= bite.toString().length) { // проведение линии в вычитании столбиком
+            outputStream.write("-")
+            counter++
+        }
+        outputStream.newLine()
+
+        var difference = bite - subtrahend // разность в вычитании столбиком
+        var space = 0
+        while (space < spacesCounter) { // перемещение на нужную позицию что бы написать следующее делимое
+            outputStream.write(" ")
+            space++
+        }
+        space = 0
+        outputStream.write("$difference")
+
+        var findDigit = lhv.toString()[subtrahend.toString().length]
+        outputStream.write("$findDigit")
+
+        bite = if (difference != 0) {
+            "$difference$findDigit".toInt()
+        } else findDigit.toString().toInt()
+        spacesCounter++
+
+        outputStream.newLine()
+
+        for (i in 1 until iterations) {
+            remains = bite % rhv
+            subtrahend = bite - remains
+            numberOfDividendBits = bite.toString().length
+            val numberOfSubtrahendBits = subtrahend.toString().length
+
+            space = if (numberOfSubtrahendBits == numberOfDividendBits) {
+                while (space < spacesCounter - 1 - i) {
+                    outputStream.write(" ")
+                    space++
+                }
+                outputStream.write("-$subtrahend")
+                0
+            } else {
+                while (space < spacesCounter - i) {
+                    outputStream.write(" ")
+                    space++
+                }
+                outputStream.write("-$subtrahend")
+                0
+            }
+
+            outputStream.newLine()
+            space = if (numberOfSubtrahendBits == numberOfDividendBits) {
+                while (space < spacesCounter - 1 - i) {
+                    outputStream.write(" ")
+                    space++
+                }
+                0
+            } else {
+                while (space < spacesCounter - i) {
+                    outputStream.write(" ")
+                    space++
+                }
+                0
+            }
+
+
+
+            counter = 0
+            if (numberOfDividendBits == numberOfSubtrahendBits) {
+                while (counter < numberOfDividendBits + 1) {
+                    outputStream.write("-")
+                    counter++
+                }
+            } else {
+                while (counter < numberOfDividendBits) {
+                    outputStream.write("-")
+                    counter++
+                }
+            }
+            outputStream.newLine()
+
+            if (i != iterations) {
+                space = if (numberOfSubtrahendBits == numberOfDividendBits) {
+                    while (space < spacesCounter - 1 - i) {
+                        outputStream.write(" ")
+                        space++
+                    }
+                    0
+                } else {
+                    while (space < spacesCounter - i) {
+                        outputStream.write(" ")
+                        space++
+                    }
+                    0
+                }
+                difference = bite - subtrahend
+                outputStream.write("$difference")
+                findDigit = lhv.toString()[spacesCounter]
+                outputStream.write("$findDigit")
+                bite = if (difference != 0) {
+                    "$difference$findDigit".toInt()
+                } else findDigit.toString().toInt()
+
+                spacesCounter++
+
+                outputStream.newLine()
+            }
+        }
+
+        spacesCounter = dividendString.length
+        while (space < spacesCounter) {
+            outputStream.write(" ")
+            space++
+        }
+        difference = bite - subtrahend
+        outputStream.write("$difference")
+    } else {
+        val remains = lhv % rhv
+        val subtrahend = lhv - remains
+        numberOfDividendBits = lhv.toString().length
+        val numberOfSubtrahendBits = subtrahend.toString().length
+
+        var space = 0
+        space = if (numberOfSubtrahendBits == numberOfDividendBits) {
+            while (space < spacesCounter - 1) {
+                outputStream.write(" ")
+                space++
+            }
+            outputStream.write("-$subtrahend")
+            0
+        } else {
+            while (space < spacesCounter) {
+                outputStream.write(" ")
+                space++
+            }
+            outputStream.write("-$subtrahend")
+            0
+        }
+
+        var subtrahendLength = subtrahend.toString().length
+        while (subtrahendLength < lhv.toString().length + 3) {
+            outputStream.write(" ")
+            subtrahendLength++
+        }
+        outputStream.write("$onePointSubtrahend")
+        outputStream.newLine()
+
+        var counter = 0
+        if (numberOfDividendBits == numberOfSubtrahendBits) {
+            while (counter < numberOfDividendBits + 1) {
+                outputStream.write("-")
+                counter++
+            }
+        } else {
+            while (counter < numberOfDividendBits) {
+                outputStream.write("-")
+                counter++
+            }
+        }
+        outputStream.newLine()
+
+        outputStream.write(" $lhv")
+    }
+    outputStream.close()
 }
+
 

@@ -538,3 +538,20 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     }
     return storage
 }
+
+fun myFun(text: String): Map<String, String> {
+    if (text.isEmpty() || text.all { it == ' ' }) return mutableMapOf("Error" to "0")
+
+    if (text.split(Regex("""[^А-Яа-яёЁ :0-9]+""")).size > 1) return mutableMapOf("Error" to "0")
+
+    val names = text.split(Regex("""[^А-Яа-яёЁ]+"""))
+    val results = text.split(Regex("""[^0-9:]+"""))
+
+    if (names.size != results.size) return mutableMapOf("Error" to "0")
+
+    val result = mutableMapOf<String, String>()
+    for (i in names.indices) result[names[i]] = results[i]
+
+    return result
+
+}
