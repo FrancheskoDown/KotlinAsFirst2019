@@ -150,12 +150,4 @@ class Tests {
         assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "+>+>[+>", 3) }
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
     }
-
-    @Test
-    fun myFun() {
-        assertEquals(mutableMapOf("Error" to "0"), myFun("    "))
-        assertEquals(mutableMapOf("Error" to "0"), myFun(""))
-        assertEquals(mutableMapOf("Error" to "0"), myFun("sasdas"))
-        assertEquals(mutableMapOf("Александр" to "39:9"), myFun("Александр  39:9"))
-    }
 }

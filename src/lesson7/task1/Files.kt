@@ -331,15 +331,16 @@ fun writer(line: String, rules: Map<Char, String>): String {
 }
 
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val text = File(inputName).readLines()
+    val text = File(inputName).readText().split(" ")
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
 
     for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
 
-    for (word in text) {
-        outputStream.write(writer(word, rules))
-        outputStream.newLine()
+    for (wordIndex in text.indices) {
+        outputStream.write(writer(text[wordIndex], rules))
+        if (text[wordIndex] == "\n") outputStream.newLine()
+        else if (wordIndex != text.lastIndex) outputStream.write(" ")
     }
     outputStream.close()
 }
@@ -439,6 +440,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     outputStream.write(stack.peek())
     outputStream.newLine()
     stack.push("<p>")
+    var pMarker = false
     outputStream.write(stack.peek())
     outputStream.newLine()
 
@@ -453,10 +455,14 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (currentLine.isEmpty()) {
             outputStream.write("</p>")
             stack.pop()
+            pMarker = true
+
             var nextLineIndex = currentLineIndex + 1
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
-            stack.push("<p>")
-            outputStream.write("<p>")
+            if (nextLineIndex < textSize && pMarker) {
+                stack.push("<p>")
+                outputStream.write("<p>")
+            }
         }
 
         //Анализ знаков
