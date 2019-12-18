@@ -331,16 +331,21 @@ fun writer(line: String, rules: Map<Char, String>): String {
 }
 
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val text = File(inputName).readText().split(" ")
+    var text = File(inputName).readText().split(" ")
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
 
     for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
 
+    var i = 0
+    var ii = i
     for (wordIndex in text.indices) {
         outputStream.write(writer(text[wordIndex], rules))
+        if (' ' in rules && ii != i && i != text.size) outputStream.write(writer(" ", rules))
+        ii = i
         if (text[wordIndex] == "\n") outputStream.newLine()
         else if (wordIndex != text.lastIndex || wordIndex != 0) outputStream.write(" ")
+        i++
     }
     outputStream.close()
 }
