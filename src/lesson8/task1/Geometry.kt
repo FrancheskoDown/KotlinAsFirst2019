@@ -3,10 +3,7 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Точка на плоскости
@@ -110,7 +107,26 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    var maxDistance = 0.0
+    var maxPointIndex = 0
+    var maxNextPointIndex = 0
+
+    if (points.size <= 1) throw (IllegalAccessException())
+    else {
+        for (pointIndex in points.indices) {
+            for (nextPointIndex in pointIndex + 1 until points.size) {
+                if (points[pointIndex].distance(points[nextPointIndex]) > maxDistance){
+                    maxDistance = points[pointIndex].distance(points[nextPointIndex])
+                    maxPointIndex = pointIndex
+                    maxNextPointIndex = nextPointIndex
+                }
+            }
+        }
+    }
+
+    return Segment(points[maxPointIndex], points[maxNextPointIndex])
+}
 
 /**
  * Простая
@@ -118,7 +134,11 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle =
+    Circle(
+        Point((diameter.begin.x + diameter.end.x) / 2, (diameter.begin.y + diameter.end.y) / 2),
+        diameter.begin.distance(diameter.end) / 2
+    )
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
