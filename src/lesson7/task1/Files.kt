@@ -454,7 +454,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
             if (nextLineIndex < textSize && pMarker && stack.lastElement() != "</p>") {
                 outputStream.write("</p><p>")
+                pMarker = false
             }
+            continue
         }
         pMarker = true
 
