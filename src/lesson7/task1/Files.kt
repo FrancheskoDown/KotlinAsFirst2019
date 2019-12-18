@@ -452,7 +452,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (currentLine.isEmpty()) {
             var nextLineIndex = currentLineIndex + 1
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
-            if (nextLineIndex < textSize && pMarker && stack.lastElement() != "</p>") {
+            if (nextLineIndex < textSize && pMarker && stack.peek() != "</p>") {
                 outputStream.write("</p><p>")
                 pMarker = false
             }
