@@ -283,6 +283,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     if (words.any { it == "" }) return true
 
     val data = words.toMutableSet()
+    if (data.size < words.size) return true
     for (i in data) {
         for (k in data - i) {
             if (k.all { it in i } || i.all { it in k }) return true

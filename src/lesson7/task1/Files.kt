@@ -60,7 +60,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     //Создание датабазы
-    val dataBase: MutableMap<String, Int> = mutableMapOf()
+    val dataBase = mutableMapOf<String, Int>()
     for (i in substrings) dataBase[i] = 0
 
     //Работа с файлом
@@ -331,7 +331,7 @@ fun writer(line: String, rules: Map<Char, String>): String {
 }
 
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val text = File(inputName).readText().split(" ")
+    val text = File(inputName).readLines()
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
 
@@ -339,7 +339,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 
     for (word in text) {
         outputStream.write(writer(word, rules))
-        if (word == "\n") outputStream.newLine()
+        outputStream.newLine()
     }
     outputStream.close()
 }
@@ -441,7 +441,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     stack.push("<p>")
     outputStream.write(stack.peek())
     outputStream.newLine()
-    var pair = false
+
 
     //Анализ текста
     for (currentLineIndex in text.indices) {
@@ -451,14 +451,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
         //Расставление абзацев
         if (currentLine.isEmpty()) {
+            outputStream.write("</p>")
+            stack.pop()
             var nextLineIndex = currentLineIndex + 1
-
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
-            if (pair) outputStream.write("</p><p>")
-            // попытался сделать через стек ничего не вышло, да и так особо ничего не вышло :/
-            continue
+            stack.push("<p>")
+            outputStream.write("<p>")
         }
-        pair = true
 
         //Анализ знаков
         while (currentCharIndex < currentLength) {
