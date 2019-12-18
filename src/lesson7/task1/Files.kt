@@ -315,11 +315,11 @@ fun top20Words(inputName: String): Map<String, Int> {
  *
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
-fun writer(line: String, rules: Map<Char, String>): String {
+fun writer(text: String, rules: Map<Char, String>): String {
     val writer = StringBuilder()
 
-    for (index in line.indices) {
-        val currentChar = line[index]
+    for (index in text.indices) {
+        val currentChar = text[index]
         val currentRule = rules[currentChar.toLowerCase()].toString()
         if (currentChar.toLowerCase() in rules.keys)
             if (currentChar.toLowerCase() != currentChar) writer.append(currentRule.capitalize())
@@ -331,22 +331,14 @@ fun writer(line: String, rules: Map<Char, String>): String {
 }
 
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    var text = File(inputName).readText().split(" ")
+    val text = File(inputName).readText()
     val outputStream = File(outputName).bufferedWriter()
     val rules = mutableMapOf<Char, String>()
 
     for ((key, value) in dictionary) rules[key.toLowerCase()] = value.toLowerCase()
 
-    var i = 0
-    var ii = i
-    for (wordIndex in text.indices) {
-        outputStream.write(writer(text[wordIndex], rules))
-        if (' ' in rules && ii != i && i != text.size) outputStream.write(writer(" ", rules))
-        ii = i
-        if (text[wordIndex] == "\n") outputStream.newLine()
-        else if (wordIndex != text.lastIndex || wordIndex != 0) outputStream.write(" ")
-        i++
-    }
+    outputStream.write(writer(text, rules))
+
     outputStream.close()
 }
 
@@ -460,17 +452,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (currentLine.isEmpty()) {
             var nextLineIndex = currentLineIndex + 1
             while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
-            if (!pMarker) {
-                outputStream.write("</p>")
-                stack.pop()
-                pMarker = true
-            }
             if (nextLineIndex < textSize && pMarker && stack.lastElement() != "</p>") {
-                stack.push("<p>")
-                pMarker = false
-                outputStream.write("<p>")
+                outputStream.write("</p><p>")
             }
         }
+        pMarker = true
 
         //Анализ знаков
         while (currentCharIndex < currentLength) {
