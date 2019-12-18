@@ -340,7 +340,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     for (wordIndex in text.indices) {
         outputStream.write(writer(text[wordIndex], rules))
         if (text[wordIndex] == "\n") outputStream.newLine()
-        else if (wordIndex != text.lastIndex) outputStream.write(" ")
+        else if (wordIndex != text.lastIndex || wordIndex != 0) outputStream.write(" ")
     }
     outputStream.close()
 }
