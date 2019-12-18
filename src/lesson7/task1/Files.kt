@@ -453,15 +453,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
         //Расставление абзацев
         if (currentLine.isEmpty()) {
+            var nextLineIndex = currentLineIndex + 1
+            while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
             if (!pMarker) {
                 outputStream.write("</p>")
                 stack.pop()
                 pMarker = true
             }
-
-
-            var nextLineIndex = currentLineIndex + 1
-            while (nextLineIndex < textSize && text[nextLineIndex].isEmpty()) nextLineIndex++
             if (nextLineIndex < textSize && pMarker && stack.lastElement() != "</p>") {
                 stack.push("<p>")
                 pMarker = false
